@@ -1,0 +1,18 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2018
+  },
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "prettier",
+    "plugin:prettier/recommended"
+  ],
+  "rules": {
+    // "no-unused-labels": "warn",
+    "@typescript-eslint/no-unused-vars": 0,
+    "no-const-assign": "off",
+    "func-names": "off",
+    "prettier/prettier": "warn"
+  }
+}
