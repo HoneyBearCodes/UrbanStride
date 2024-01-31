@@ -1,0 +1,62 @@
+<!-- HEADER -->
+<header>
+  <!-- NAVIGATION -->
+  <nav class="main-nav container">
+    <!-- LEFT NAVIGATION (LINKS) -->
+
+    <ul class="main-nav-links">
+      <li>
+        <a class="main-nav-link <%= path === '/' ? 'active' : '' %>" href="/"
+          ><i class="fa-solid fa-shop"></i> Shop</a
+        >
+      </li>
+      <li>
+        <a class="main-nav-link <%= path === '/cart' ? 'active' : '' %>" href="/cart"
+          ><i class="fa-solid fa-cart-shopping"></i> Cart</a
+        >
+      </li>
+      <li>
+        <a class="main-nav-link <%= path === '/orders' ? 'active' : '' %>" href="/orders"
+          ><i class="fa-solid fa-truck-fast"></i> Orders</a
+        >
+      </li>
+    </ul>
+
+    <!-- SITE LOGO (CENTER) -->
+    <a href="/">
+      <img class="logo" src="/img/logo.png" alt="urban stride logo" />
+    </a>
+
+    <!-- NAVIGATION ACTIONS (RIGHT) -->
+    <div class="main-nav-actions">
+      <form action="/admin/add-product" method="get">
+        <button class="main-nav-action add">
+          <i class="fa-solid fa-circle-plus"></i> Add
+        </button>
+      </form>
+
+      <form action="/admin/products" method="get">
+        <button class="main-nav-action <%= path === '/admin/products' ? 'active' : '' %>">
+          <i class="fa-solid fa-key"></i> Admin
+        </button>
+      </form>
+      <form action="/" method="get">
+        <button class="main-nav-action">
+          <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </button>
+      </form>
+    </div>
+
+    <!-- RESP NAV -->
+    <div class="resp-nav">
+      <button class="resp-nav-btn-links">
+        <i class="fa-solid fa-bars"></i>
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <button class="resp-nav-btn-actions">
+        <i class="fa-solid fa-user"></i>
+      </button>
+    </div>
+  </nav>
+</header>
