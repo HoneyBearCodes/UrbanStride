@@ -14,6 +14,19 @@ import { get404 } from './controllers/errors.js';
 // Routers for different routes
 import adminRouter from './routes/admin.js';
 
+// User model
+import User, { UserDocument } from './models/user.js';
+
+/**
+ * Using module augmentation for patching the `Request` object and
+ * adding a user field to it which of type `User`
+ */
+declare module 'express-serve-static-core' {
+  interface Request {
+    user: UserDocument;
+  }
+}
+
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 const rootDir = appRootPath.toString();
@@ -26,6 +39,22 @@ app.set('views', join(rootDir, 'src', 'views'));
 // Serve static files from the 'public' directory
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(join(rootDir, 'public')));
+
+// Middleware for getting the user and attaching it to the request
+// Note: For testing purposes before implementing sessions & auth
+app.use(async (req, _res, next) => {
+  try {
+    const user = await User.findById('65bded4887008b5cdc1b3893');
+    if (user) {
+      // Here user is an object populated with all the mongoose methods
+      // Note: must use module augmentation before accessing req.user
+      req.user = user;
+      next();
+    }
+  } catch (err) {
+    error(err);
+  }
+});
 
 app.use('/admin', adminRouter);
 
@@ -41,6 +70,22 @@ try {
     clearConsole: true,
     message: `Successfully connected to the ${bold(italic(process.env.MONGO_DEFAULT_DB))} database...`,
   });
+
+  // Create a user if there is none
+  // Note: For testing purposes before implementing sessions & auth
+  let user = await User.findOne();
+  if (!user) {
+    user = new User({
+      name: 'Test User #01',
+      email: 'joemama@isslick.com',
+      cart: {
+        items: [],
+      },
+    });
+
+    user.save();
+  }
+
   // Start the Express server
   app.listen(PORT, () => {
     log({
