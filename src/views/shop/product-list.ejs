@@ -1,0 +1,65 @@
+<%- include('../includes/head.ejs')  %>
+<link rel="stylesheet" href="/css/error.css" />
+<link rel="stylesheet" href="/css/queries.css" />
+</head>
+
+<body>
+<%- include('../includes/navigation.ejs') %>
+
+<!-- MAIN CONTENT -->
+<main>
+  <div class="container main">
+    <% if (products.length > 0 ) { %>
+    <!-- PRODUCTS GRID -->
+    <div class="products grid grid--3-cols">
+      <% for( let product of products ) { %>
+      <!-- PRODUCT CARD -->
+        <article class="product card">
+        <form action="#" method="post">
+          <button class="add-to-cart" type="submit">
+            <i class="fa-solid fa-cart-plus"></i>
+          </button>
+        </form>
+        <header>
+          <img
+            class="product-img"
+            src="/img/product.jpg"
+            alt="product image"
+          />
+          <div class="product-details">
+            <p class="product-title"><%= product.title %></p>
+            <p class="product-price">$<%= product.price %></p>
+          </div>
+        </header>
+
+        <footer class="product-actions">
+          <form action="/products/<%= product._id %>" method="get">
+            <button class="details" type="submit">
+              View Details <i class="fa-solid fa-arrow-right-long"></i>
+            </button>
+          </form>
+        </footer>
+        </article>
+      <% } %>
+    </div>
+
+    <nav class="pagination margin-bottom-md">
+      <ul class="pagination-links">
+        <li><a href="#" class="pagination-link active">1</a></li>
+        <li><a href="#" class="pagination-link">2</a></li>
+        <li><a href="#" class="pagination-link">3</a></li>
+        <li><a href="#" class="pagination-link">4</a></li>
+        <li><a href="#" class="pagination-link">5</a></li>
+      </ul>
+    </nav>
+    <% } else { %>
+      <div class="error-card card card--linear margin-bottom-sm">
+        <h1 class="error-code">Boo<i class="fa-solid fa-ghost"></i>!</h1>
+        <p class="error-title">No Products Found!</p>
+        <p class="error-subtitle margin-bottom-sm">
+          But you can create new ones!
+        </p>
+        <p class="error-message">[🛍️ Products took a sabbatical 🛒]</p>
+      </div>
+      <% } %>
+<%- include('../includes/end.ejs') %>

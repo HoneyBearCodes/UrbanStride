@@ -12,6 +12,7 @@ import { getPrivateIpAddress } from './utils/getIp.js';
 import { get404 } from './controllers/errors.js';
 
 // Routers for different routes
+import shopRouter from './routes/shop.js';
 import adminRouter from './routes/admin.js';
 
 // User model
@@ -56,6 +57,7 @@ app.use(async (req, _res, next) => {
   }
 });
 
+app.use(shopRouter);
 app.use('/admin', adminRouter);
 
 // Middleware to handle 404 errors

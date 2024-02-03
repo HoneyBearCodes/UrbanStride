@@ -1,0 +1,30 @@
+<%- include('../includes/head.ejs')  %>
+<link rel="stylesheet" href="/css/forms.css">
+<link rel="stylesheet" href="/css/error.css" />
+<link rel="stylesheet" href="/css/queries.css" />
+</head>
+
+<body>
+<%- include('../includes/navigation.ejs') %>
+
+<!-- MAIN CONTENT -->
+ <!-- MAIN CONTENT -->
+ <main>
+  <div class="container margin-bottom-sm">
+    <!-- CARD GRID -->
+    <div class="grid grid--2-cols card product-details-container">
+      <!-- CARD -->
+      <div class="product-img-container">
+        <img class="product-img" src="/img/product.jpg" alt="<%= product.title %> image" />
+      </div>
+
+      <div class="product-details product-details--lg">
+        <p class="product-title"><%= product.title %></p>
+        <p class="product-description"> <%= product.description %></p>
+        <p class="product-price"><span>$</span><%= product.price %></p>
+      </div>
+      <form action="/cart" method="post">
+        <button class="submit-btn" type="submit">Add To Cart</button>
+      </form>
+    </div>
+<%- include('../includes/end.ejs') %>
