@@ -1,6 +1,11 @@
 import { Router } from 'express';
 
-import { getProduct, getProducts, postCart } from '../controllers/shop.js';
+import {
+  getCart,
+  getProduct,
+  getProducts,
+  postCart,
+} from '../controllers/shop.js';
 
 const shopRouter = Router();
 
@@ -8,6 +13,6 @@ shopRouter.get('/', getProducts);
 
 shopRouter.get('/products/:productId', getProduct);
 
-shopRouter.post('/cart', postCart);
+shopRouter.route('/cart').get(getCart).post(postCart);
 
 export default shopRouter;

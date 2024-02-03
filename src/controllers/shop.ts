@@ -54,3 +54,20 @@ export const postCart: RequestHandler<
     error(err);
   }
 };
+
+// Handling for displaying all the cart items
+export const getCart: RequestHandler = async (req, res) => {
+  try {
+    const user = await req.user.populate('cart.items.productId');
+    const cartItems = user.cart.items;
+    if (user) {
+      res.render('shop/cart', {
+        path: '/cart',
+        pageTitle: 'Your Cart',
+        products: cartItems,
+      });
+    }
+  } catch (err) {
+    error(err);
+  }
+};

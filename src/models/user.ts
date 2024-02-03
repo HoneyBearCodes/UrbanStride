@@ -16,7 +16,7 @@ export interface UserDocument extends Document {
   name: string;
   email: string;
   cart: {
-    item: CartItem[];
+    items: CartItem[];
   };
   addToCart: (product: ProductDocument) => ProductDocument;
 }
