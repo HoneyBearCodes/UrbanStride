@@ -51,13 +51,13 @@ export const postAddProduct: RequestHandler<
     // Log a success message and the created product
     log({ message: 'Product successfully created' });
     log({ object: product });
-
-    // Redirect to the admin products page after successful creation
-    res.redirect('/admin/products');
   } catch (err) {
     // If an error occurs, log it
     error(err);
   }
+
+  // Redirect to the admin products page
+  res.redirect('/admin/products');
 };
 
 // Handler for rendering the edit product page
@@ -111,11 +111,11 @@ export const postEditProduct: RequestHandler<
       product.price = Number(updatedPrice);
       product.description = updatedDescription;
       product.save();
-      res.redirect('/admin/products');
     }
   } catch (err) {
     error(err);
   }
+  res.redirect('/admin/products');
 };
 
 // Handler for deleting a product
@@ -127,8 +127,8 @@ export const postDeleteProduct: RequestHandler<
   const { id: productId } = req.body;
   try {
     await Product.findByIdAndDelete(productId);
-    res.redirect('/admin/products');
   } catch (err) {
     error(err);
   }
+  res.redirect('/admin/products');
 };

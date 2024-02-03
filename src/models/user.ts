@@ -19,6 +19,7 @@ export interface UserDocument extends Document {
     items: CartItem[];
   };
   addToCart: (product: ProductDocument) => ProductDocument;
+  removeFromCart: (productId: string) => ProductDocument;
 }
 
 // Define the schema for the User model
@@ -72,6 +73,15 @@ usesrSchema.methods.addToCart = function (
   };
 
   // Save the user document and return the updated document
+  return this.save();
+};
+
+// Utility method to delete a cart item
+usesrSchema.methods.removeFromCart = function (productId: string) {
+  const updatedCartItems = this.cart.items.filter(
+    (item: CartItem) => item.productId.toString() !== productId.toString(),
+  );
+  this.cart.items = updatedCartItems;
   return this.save();
 };
 

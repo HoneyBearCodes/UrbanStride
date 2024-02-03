@@ -1,5 +1,4 @@
 import { RequestHandler } from 'express';
-
 import Product from '../models/product.js';
 import { error } from '../utils/logger.js';
 
@@ -48,11 +47,11 @@ export const postCart: RequestHandler<
 
     if (product) {
       req.user.addToCart(product);
-      res.redirect('/cart');
     }
   } catch (err) {
     error(err);
   }
+  res.redirect('/cart');
 };
 
 // Handling for displaying all the cart items
@@ -70,4 +69,19 @@ export const getCart: RequestHandler = async (req, res) => {
   } catch (err) {
     error(err);
   }
+};
+
+// Handler for deleting a cart item
+export const postCartDeleteItem: RequestHandler<
+  unknown,
+  unknown,
+  { productId: string }
+> = async (req, res) => {
+  const { productId } = req.body;
+  try {
+    req.user.removeFromCart(productId);
+  } catch (err) {
+    error(err);
+  }
+  res.redirect('/cart');
 };
