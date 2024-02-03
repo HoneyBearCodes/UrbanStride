@@ -18,8 +18,9 @@ export interface UserDocument extends Document {
   cart: {
     items: CartItem[];
   };
-  addToCart: (product: ProductDocument) => ProductDocument;
-  removeFromCart: (productId: string) => ProductDocument;
+  addToCart: (product: ProductDocument) => void;
+  removeFromCart: (productId: string) => void;
+  clearCart: () => void;
 }
 
 // Define the schema for the User model
@@ -44,9 +45,7 @@ const usesrSchema = new Schema<UserDocument>({
 });
 
 // Utility method to add an item to the user's cart
-usesrSchema.methods.addToCart = function (
-  product: ProductDocument,
-): Promise<UserDocument> {
+usesrSchema.methods.addToCart = function (product: ProductDocument) {
   // Find the index of the product in the user's cart
   const cartProductIndex: number = this.cart.items.findIndex(
     (cartItem: CartItem) =>
@@ -72,8 +71,8 @@ usesrSchema.methods.addToCart = function (
     items: updatedCartItems,
   };
 
-  // Save the user document and return the updated document
-  return this.save();
+  // Save the user document
+  this.save();
 };
 
 // Utility method to delete a cart item
@@ -82,7 +81,13 @@ usesrSchema.methods.removeFromCart = function (productId: string) {
     (item: CartItem) => item.productId.toString() !== productId.toString(),
   );
   this.cart.items = updatedCartItems;
-  return this.save();
+  this.save();
+};
+
+// Utility method to clear the cart
+usesrSchema.methods.clearCart = function () {
+  this.cart = { items: [] };
+  this.save();
 };
 
 // Create the User model based on the defined schema

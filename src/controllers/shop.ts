@@ -1,5 +1,7 @@
 import { RequestHandler } from 'express';
+
 import Product from '../models/product.js';
+import Order from '../models/order.js';
 import { error } from '../utils/logger.js';
 
 // Handler for displaying the user product list
@@ -84,4 +86,30 @@ export const postCartDeleteItem: RequestHandler<
     error(err);
   }
   res.redirect('/cart');
+};
+
+// Handler for creating an order
+export const postOrder: RequestHandler = async (req, res) => {
+  try {
+    const user = await req.user.populate('cart.items.productId');
+    const cartItems = user.cart.items.map(({ productId, quantity }) => ({
+      quantity,
+      product: { ...productId },
+    }));
+
+    if (cartItems) {
+      const order = new Order({
+        user: {
+          name: req.user.name,
+          id: req.user,
+        },
+        products: cartItems,
+      });
+      order.save();
+      req.user.clearCart();
+    }
+  } catch (err) {
+    error(err);
+  }
+  res.redirect('/orders');
 };
