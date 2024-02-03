@@ -11,6 +11,9 @@ import { getPrivateIpAddress } from './utils/getIp.js';
 // Controller for handling 404 errors
 import { get404 } from './controllers/errors.js';
 
+// Routers for different routes
+import adminRouter from './routes/admin.js';
+
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 const rootDir = appRootPath.toString();
@@ -23,6 +26,8 @@ app.set('views', join(rootDir, 'src', 'views'));
 // Serve static files from the 'public' directory
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(join(rootDir, 'public')));
+
+app.use('/admin', adminRouter);
 
 // Middleware to handle 404 errors
 app.use(get404);

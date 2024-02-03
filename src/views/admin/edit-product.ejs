@@ -1,0 +1,43 @@
+<%- include('../includes/head.ejs') %>
+  <link rel="stylesheet" href="/css/forms.css" />
+  <link rel="stylesheet" href="/css/queries.css" />
+  </head>
+
+  <body>
+    <%- include('../includes/navigation.ejs') %>
+
+      <!-- MAIN CONTENT -->
+      <main>
+        <div class="container">
+          <form action="/admin/<%= editing ? 'edit-product' : 'add-product'%>" method="POST"
+            class="form-control grid grid--2-cols">
+            <div class="inputs">
+              <input type="text" name="title" placeholder="Enter product title"
+                value="<%= editing ? product.title : '' %>" />
+              <input type="number" name="price" placeholder="Enter product price" step="0.01"
+                value="<%= editing ? product.price : '' %>" />
+              <textarea name="description" rows="10" placeholder="Enter product description.">
+                <%= editing ? product.description : '' %>
+              </textarea>
+              <button class="submit-btn" type="submit">
+                <%= editing ? 'Save Changes' : 'Add Product' %>
+              </button>
+            </div>
+
+            <div class="image-selection">
+              <label for="file">
+                <div class="img-container card">
+                  <p class="img-icon"><i class="fa-solid fa-image"></i></p>
+                  <p>
+                    <%= editing ? 'Click here to update your image' : 'Click here to add your image' %>
+                  </p>
+                </div>
+              </label>
+              <input type="file" name="img" id="file" class="img-input" />
+            </div>
+            <% if (editing) {%>
+              <input type="hidden" name="id" value="<%= product._id %>" />
+              <% } %>
+          </form>
+        </div>
+        <%- include('../includes/end.ejs') %>
