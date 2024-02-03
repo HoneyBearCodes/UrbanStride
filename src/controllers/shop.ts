@@ -113,3 +113,19 @@ export const postOrder: RequestHandler = async (req, res) => {
   }
   res.redirect('/orders');
 };
+
+// Handler for fetching and displaying orders
+export const getOrders: RequestHandler = async (req, res) => {
+  try {
+    const orders = await Order.find({ 'user.id': req.user._id });
+    if (orders) {
+      res.render('shop/orders', {
+        path: '/orders',
+        pageTitle: 'Your Orders',
+        orders,
+      });
+    }
+  } catch (err) {
+    error(err);
+  }
+};
