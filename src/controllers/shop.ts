@@ -35,3 +35,22 @@ export const getProduct: RequestHandler<{ productId: string }> = async (
     error(err);
   }
 };
+
+// Handler for adding item to cart
+export const postCart: RequestHandler<
+  unknown,
+  unknown,
+  { productId: string }
+> = async (req, res) => {
+  const { productId } = req.body;
+  try {
+    const product = await Product.findById(productId);
+
+    if (product) {
+      req.user.addToCart(product);
+      res.redirect('/cart');
+    }
+  } catch (err) {
+    error(err);
+  }
+};
