@@ -14,6 +14,7 @@ import { get404 } from './controllers/errors.js';
 // Routers for different routes
 import shopRouter from './routes/shop.js';
 import adminRouter from './routes/admin.js';
+import authRouter from './routes/auth.js';
 
 // User model
 import User, { UserDocument } from './models/user.js';
@@ -58,6 +59,7 @@ app.use(async (req, _res, next) => {
 });
 
 app.use(shopRouter);
+app.use(authRouter);
 app.use('/admin', adminRouter);
 
 // Middleware to handle 404 errors
