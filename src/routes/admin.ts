@@ -8,17 +8,21 @@ import {
   postDeleteProduct,
   postEditProduct,
 } from '../controllers/admin.js';
+import isAuthenticated from '../middlewares/is-auth.js';
 
 const adminRouter = Router();
 
-adminRouter.route('/add-product').get(getAddProduct).post(postAddProduct);
+adminRouter
+  .route('/add-product')
+  .get(isAuthenticated, getAddProduct)
+  .post(isAuthenticated, postAddProduct);
 
-adminRouter.get('/products', getProducts);
+adminRouter.get('/products', isAuthenticated, getProducts);
 
-adminRouter.post('/edit-product/:productId', getEditProduct);
+adminRouter.post('/edit-product/:productId', isAuthenticated, getEditProduct);
 
-adminRouter.post('/edit-product', postEditProduct);
+adminRouter.post('/edit-product', isAuthenticated, postEditProduct);
 
-adminRouter.post('/delete-product', postDeleteProduct);
+adminRouter.post('/delete-product', isAuthenticated, postDeleteProduct);
 
 export default adminRouter;

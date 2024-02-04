@@ -9,6 +9,7 @@ import {
   postCartDeleteItem,
   postOrder,
 } from '../controllers/shop.js';
+import isAuthenticated from '../middlewares/is-auth.js';
 
 const shopRouter = Router();
 
@@ -16,12 +17,15 @@ shopRouter.get('/', getProducts);
 
 shopRouter.get('/products/:productId', getProduct);
 
-shopRouter.route('/cart').get(getCart).post(postCart);
+shopRouter
+  .route('/cart')
+  .get(isAuthenticated, getCart)
+  .post(isAuthenticated, postCart);
 
-shopRouter.post('/cart-delete-item', postCartDeleteItem);
+shopRouter.post('/cart-delete-item', isAuthenticated, postCartDeleteItem);
 
-shopRouter.post('/create-order', postOrder);
+shopRouter.post('/create-order', isAuthenticated, postOrder);
 
-shopRouter.get('/orders', getOrders);
+shopRouter.get('/orders', isAuthenticated, getOrders);
 
 export default shopRouter;
