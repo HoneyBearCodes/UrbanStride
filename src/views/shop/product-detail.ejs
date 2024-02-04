@@ -23,9 +23,11 @@
         <p class="product-description"> <%= product.description %></p>
         <p class="product-price"><span>$</span><%= product.price %></p>
       </div>
-      <form action="/cart" method="post">
-        <button class="submit-btn" type="submit">Add To Cart</button>
-        <input type="hidden" name="productId" value="<%= product._id%>">
-      </form>
+      <% if (isAuthenticated) { %>
+        <form action="/cart" method="post">
+          <button class="submit-btn" type="submit">Add To Cart</button>
+          <input type="hidden" name="productId" value="<%= product._id%>">
+        </form>
+      <% } %>
     </div>
 <%- include('../includes/end.ejs') %>

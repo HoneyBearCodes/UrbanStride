@@ -10,16 +10,20 @@
           ><i class="fa-solid fa-shop"></i> Shop</a
         >
       </li>
-      <li>
-        <a class="main-nav-link <%= path === '/cart' ? 'active' : '' %>" href="/cart"
-          ><i class="fa-solid fa-cart-shopping"></i> Cart</a
-        >
-      </li>
-      <li>
-        <a class="main-nav-link <%= path === '/orders' ? 'active' : '' %>" href="/orders"
-          ><i class="fa-solid fa-truck-fast"></i> Orders</a
-        >
-      </li>
+
+      <% if (isAuthenticated) { %>
+        <li>
+          <a class="main-nav-link <%= path === '/cart' ? 'active' : '' %>" href="/cart"
+            ><i class="fa-solid fa-cart-shopping"></i> Cart</a
+          >
+        </li>
+        
+        <li>
+          <a class="main-nav-link <%= path === '/orders' ? 'active' : '' %>" href="/orders"
+            ><i class="fa-solid fa-truck-fast"></i> Orders</a
+          >
+        </li>
+      <% } %>
     </ul>
 
     <!-- SITE LOGO (CENTER) -->
@@ -41,13 +45,19 @@
           <i class="fa-solid fa-key"></i> Admin
         </button>
       </form>
-      <% } %>
 
-      <form action="/login" method="get">
+      <form action="/logout" method="post">
         <button class="main-nav-action <%= path === '/login' ? 'active' : '' %>">
-          <i class="fa-solid fa-right-to-bracket"></i> Login
+          <i class="fa-solid fa-right-from-bracket"></i> Logout
         </button>
       </form>
+      <% } else { %>
+        <form action="/login" method="get">
+          <button class="main-nav-action <%= path === '/login' ? 'active' : '' %>">
+            <i class="fa-solid fa-right-to-bracket"></i> Login
+          </button>
+        </form>
+      <% } %>
     </div>
 
     <!-- RESP NAV -->

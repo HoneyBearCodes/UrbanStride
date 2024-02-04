@@ -37,6 +37,7 @@ declare module 'express-serve-static-core' {
  */
 declare module 'express-session' {
   interface Session {
+    user: UserDocument;
     isLoggedIn: boolean;
   }
 }
@@ -74,11 +75,15 @@ app.use(
 // Middleware for getting the user and attaching it to the request
 // Note: For testing purposes before implementing sessions & auth
 app.use(async (req, _res, next) => {
+  if (!req.session.user) {
+    return next();
+  }
+
   try {
-    const user = await User.findById('65bded4887008b5cdc1b3893');
+    const user = await User.findById(req.session.user._id);
     if (user) {
-      // Here user is an object populated with all the mongoose methods
-      // Note: must use module augmentation before accessing req.user
+      // Creating a user based on data stored in the session, so the
+      // data that persists across requests
       req.user = user;
       next();
     }

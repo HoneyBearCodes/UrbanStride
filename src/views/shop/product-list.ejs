@@ -15,12 +15,14 @@
       <% for( let product of products ) { %>
       <!-- PRODUCT CARD -->
         <article class="product card">
-        <form action="/cart" method="post">
-          <button class="add-to-cart" type="submit">
-            <i class="fa-solid fa-cart-plus"></i>
-          </button>
-          <input type="hidden" name="productId" value="<%= product._id%>">
-        </form>
+          <% if (isAuthenticated) { %>
+            <form action="/cart" method="post">
+              <button class="add-to-cart" type="submit">
+                <i class="fa-solid fa-cart-plus"></i>
+              </button>
+              <input type="hidden" name="productId" value="<%= product._id%>">
+            </form>
+          <% } %>
         <header>
           <img
             class="product-img"
