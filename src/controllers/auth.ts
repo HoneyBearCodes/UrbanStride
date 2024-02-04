@@ -41,3 +41,19 @@ export const postLogout: RequestHandler = (req, res) => {
     res.redirect('/');
   });
 };
+
+// Handler for displaying signup page
+export const getSignup: RequestHandler = (req, res) => {
+  if (req.session.isLoggedIn) {
+    res.redirect('/');
+  } else {
+    res.render('auth/signup', {
+      path: '/signup',
+      pageTitle: 'Signup',
+      isAuthenticated: req.session.isLoggedIn,
+    });
+  }
+};
+
+// Handler for signing up users
+export const postSignup: RequestHandler = (_req, _res) => {};

@@ -1,0 +1,22 @@
+<%- include('../includes/head.ejs') %>
+  <link rel="stylesheet" href="/css/forms.css" />
+  <link rel="stylesheet" href="/css/queries.css" />
+  </head>
+
+  <body>
+    <%- include('../includes/navigation.ejs') %>
+
+      <!-- MAIN CONTENT -->
+      <main>
+        <div class="container">
+          <div class="error">
+            <form action="/signup" method="POST" class="form-control container card">
+              <div class="inputs">
+                <input type="email" name="email" placeholder="Your email" />
+                <input type="password" name="pass" placeholder="Your password" />
+                <input type="password" name="confirmPass" placeholder="Confirm password" />
+                <button class="submit-btn" type="submit">Create Account <i class="fa-solid fa-arrow-right-long"></i></button>
+              </div>
+            </form>
+          </div>
+        <%- include('../includes/end.ejs') %>
