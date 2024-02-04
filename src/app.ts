@@ -3,6 +3,8 @@ import { join } from 'path'; // Path module for file path operations
 import express from 'express'; // Express framework for handling HTTP requests
 import appRootPath from 'app-root-path'; // Library for getting the root path of the application
 import { connect } from 'mongoose'; // MongoDB connection library
+import session from 'express-session'; // Library for storing sessions
+import { default as connectMongoDBSession } from 'connect-mongodb-session'; // Data store for sessions
 
 // Custom utility functions for logging and getting IP addresses
 import { bold, italic, log, underline, error } from './utils/logger.js';
@@ -21,7 +23,7 @@ import User, { UserDocument } from './models/user.js';
 
 /**
  * Using module augmentation for patching the `Request` object and
- * adding a user field to it which of type `User`
+ * adding a user field to it which is of type `User`
  */
 declare module 'express-serve-static-core' {
   interface Request {
@@ -29,9 +31,27 @@ declare module 'express-serve-static-core' {
   }
 }
 
-const app = express();
+/**
+ * Using module augmentation for patching the `Session` object and
+ * adding a isLoggedIn field to it which is of type `boolean`
+ */
+declare module 'express-session' {
+  interface Session {
+    isLoggedIn: boolean;
+  }
+}
+
 const PORT = Number(process.env.PORT) || 3000;
+const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@shopdb.2rf1pd9.mongodb.net/${process.env.MONGO_DEFAULT_DB}?retryWrites=true&w=majority`;
 const rootDir = appRootPath.toString();
+
+// Initializing the app and session storage
+const app = express();
+const MongoDBStore = connectMongoDBSession(session);
+const sessionDataStore = new MongoDBStore({
+  uri: MONGODB_URI,
+  collection: 'user_sessions',
+});
 
 // Configure view engine and views directory
 app.set('view engine', 'ejs');
@@ -39,8 +59,17 @@ app.set('views', join(rootDir, 'src', 'views'));
 
 // Parse incoming request bodies with urlencoded payloads and
 // Serve static files from the 'public' directory
+// Initialize the sessions
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(join(rootDir, 'public')));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET!,
+    resave: false,
+    saveUninitialized: false,
+    store: sessionDataStore,
+  }),
+);
 
 // Middleware for getting the user and attaching it to the request
 // Note: For testing purposes before implementing sessions & auth
@@ -67,9 +96,7 @@ app.use(get404);
 
 try {
   // Connect to the MongoDB database
-  await connect(
-    `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@shopdb.2rf1pd9.mongodb.net/${process.env.MONGO_DEFAULT_DB}?retryWrites=true&w=majority`,
-  );
+  await connect(MONGODB_URI);
   log({
     clearConsole: true,
     message: `Successfully connected to the ${bold(italic(process.env.MONGO_DEFAULT_DB))} database...`,

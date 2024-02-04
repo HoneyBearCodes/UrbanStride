@@ -29,7 +29,8 @@
 
     <!-- NAVIGATION ACTIONS (RIGHT) -->
     <div class="main-nav-actions">
-      <!-- <form action="/admin/add-product" method="get">
+      <% if (isAuthenticated) { %>
+        <form action="/admin/add-product" method="get">
         <button class="main-nav-action add">
           <i class="fa-solid fa-circle-plus"></i> Add
         </button>
@@ -39,7 +40,8 @@
         <button class="main-nav-action <%= path === '/admin/products' ? 'active' : '' %>">
           <i class="fa-solid fa-key"></i> Admin
         </button>
-      </form> -->
+      </form>
+      <% } %>
 
       <form action="/login" method="get">
         <button class="main-nav-action <%= path === '/login' ? 'active' : '' %>">

@@ -45,11 +45,12 @@ Urban Stride is a dynamic sports shoe e-commerce platform developed with TypeScr
    ```js
     {
       "env": {
-        "MONGO_USER": "",
-        "MONGO_PASS": "",
-        "MONGO_DEFAULT_DB": "",
-        "STRIPE_KEY": "",
-        "NODE_ENV": ""
+        "MONGO_USER": "", // username for MongoDB database
+        "MONGO_PASS": "", // password for MongoDB database
+        "MONGO_DEFAULT_DB": "", // name of the database
+        "SESSION_SECRET": "", // secret for hashing session cookie
+        "STRIPE_KEY": "", // Stripe auth key
+        "NODE_ENV": "" // 'development' or 'production'
       }
     }
    ```

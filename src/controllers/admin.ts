@@ -4,13 +4,14 @@ import Product, { ProductDocument } from '../models/product.js';
 import { error, log } from '../utils/logger.js';
 
 // Handler for rendering the product list for the '/admin/product-list'
-export const getProducts: RequestHandler = async (_req, res) => {
+export const getProducts: RequestHandler = async (req, res) => {
   try {
     const products = await Product.find();
     res.render('admin/product-list', {
       products,
       pageTitle: 'Admin Products',
       path: '/admin/products',
+      isAuthenticated: req.session.isLoggedIn,
     });
   } catch (err) {
     error(err);
@@ -18,11 +19,12 @@ export const getProducts: RequestHandler = async (_req, res) => {
 };
 
 // Handler for rendering the "Add Product" page
-export const getAddProduct: RequestHandler = (_req, res) => {
+export const getAddProduct: RequestHandler = (req, res) => {
   res.render('admin/edit-product', {
     pageTitle: 'Add Product',
     path: '/admin/edit-product',
     editing: false,
+    isAuthenticated: req.session.isLoggedIn,
   });
 };
 
@@ -85,6 +87,7 @@ export const getEditProduct: RequestHandler<
       path: '/admin/edit-product',
       editing: editMode,
       product,
+      isAuthenticated: req.session.isLoggedIn,
     });
   } catch (err) {
     error(err);
