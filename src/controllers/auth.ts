@@ -56,4 +56,25 @@ export const getSignup: RequestHandler = (req, res) => {
 };
 
 // Handler for signing up users
-export const postSignup: RequestHandler = (_req, _res) => {};
+export const postSignup: RequestHandler<
+  unknown,
+  unknown,
+  { [key: string]: string }
+> = async (req, res) => {
+  const { email, pass: password, confirmPass: _confirmPassword } = req.body;
+
+  // Check if any user with provided email already exists
+  try {
+    const user = await User.findOne({ email: email });
+    if (user) {
+      // User already exists
+      return res.redirect('/signup');
+    }
+
+    // Create new user with provided credentials
+    await new User({ email, password, cart: { items: [] } }).save();
+    res.redirect('/login');
+  } catch (err) {
+    error(err);
+  }
+};

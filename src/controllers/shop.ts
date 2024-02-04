@@ -103,7 +103,7 @@ export const postOrder: RequestHandler = async (req, res) => {
     if (cartItems) {
       const order = new Order({
         user: {
-          name: req.user.name,
+          name: req.user.email,
           id: req.user,
         },
         products: cartItems,

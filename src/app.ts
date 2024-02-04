@@ -107,21 +107,6 @@ try {
     message: `Successfully connected to the ${bold(italic(process.env.MONGO_DEFAULT_DB))} database...`,
   });
 
-  // Create a user if there is none
-  // Note: For testing purposes before implementing sessions & auth
-  let user = await User.findOne();
-  if (!user) {
-    user = new User({
-      name: 'Test User #01',
-      email: 'joemama@isslick.com',
-      cart: {
-        items: [],
-      },
-    });
-
-    user.save();
-  }
-
   // Start the Express server
   app.listen(PORT, () => {
     log({

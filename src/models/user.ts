@@ -13,8 +13,8 @@ interface CartItem {
 
 // Define the structure of a user document
 export interface UserDocument extends Document {
-  name: string;
   email: string;
+  password: string;
   cart: {
     items: CartItem[];
   };
@@ -25,10 +25,10 @@ export interface UserDocument extends Document {
 
 // Define the schema for the User model
 const usesrSchema = new Schema<UserDocument>({
-  // User's name is a required string
-  name: { type: String, required: true },
   // User's email is a required string
   email: { type: String, required: true },
+  // User's password is a required string
+  password: { type: String, required: true },
   // User's cart contains an array of items
   cart: {
     items: [
