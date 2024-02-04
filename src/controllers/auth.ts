@@ -18,14 +18,31 @@ export const getLogin: RequestHandler = (req, res) => {
 };
 
 // Handler for logging in the users
-export const postLogin: RequestHandler = async (req, res) => {
+export const postLogin: RequestHandler<
+  unknown,
+  unknown,
+  { [key: string]: string }
+> = async (req, res) => {
+  const { email, pass: password } = req.body;
+
   try {
-    const user = await User.findById('65bf70d1cf2127ca1f12d280');
+    // finding user that matches the provided email
+    const user = await User.findOne({ email: email });
     if (user) {
-      req.session.isLoggedIn = true;
-      req.session.user = user;
-      // Not necessary but required to make sure only redirect after session created
-      req.session.save(() => res.redirect('/'));
+      // comparing the provided password with hashed one stored in DB
+      const doMatch = await bcrypt.compare(password, user.password);
+
+      if (doMatch) {
+        // password matches
+        req.session.isLoggedIn = true;
+        req.session.user = user;
+        // Not necessary but required to make sure only redirect after session created
+        req.session.save(() => res.redirect('/'));
+      } else {
+        res.redirect('/login');
+      }
+    } else {
+      res.redirect('/login');
     }
   } catch (err) {
     error(err);
