@@ -92,10 +92,12 @@
   },
   "homepage": "https://github.com/AmaaelTyrneaMitore/UrbanStride#readme",
   "dependencies": {
+    "@types/csurf": "^1.11.5",
     "app-root-path": "^3.1.0",
     "bcryptjs": "^2.4.3",
     "chalk": "^5.3.0",
     "connect-mongodb-session": "^5.0.0",
+    "csurf": "^1.11.0",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
     "express-session": "^1.18.0",

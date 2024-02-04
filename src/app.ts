@@ -5,6 +5,7 @@ import appRootPath from 'app-root-path'; // Library for getting the root path of
 import { connect } from 'mongoose'; // MongoDB connection library
 import session from 'express-session'; // Library for storing sessions
 import { default as connectMongoDBSession } from 'connect-mongodb-session'; // Data store for sessions
+import csrf from 'csurf'; // Package for CSRF protection
 
 // Custom utility functions for logging and getting IP addresses
 import { bold, italic, log, underline, error } from './utils/logger.js';
@@ -53,6 +54,7 @@ const sessionDataStore = new MongoDBStore({
   uri: MONGODB_URI,
   collection: 'user_sessions',
 });
+const CSRFProtection = csrf();
 
 // Configure view engine and views directory
 app.set('view engine', 'ejs');
@@ -60,7 +62,7 @@ app.set('views', join(rootDir, 'src', 'views'));
 
 // Parse incoming request bodies with urlencoded payloads and
 // Serve static files from the 'public' directory
-// Initialize the sessions
+// Initialize the session and the CSRF protection
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(join(rootDir, 'public')));
 app.use(
@@ -71,6 +73,7 @@ app.use(
     store: sessionDataStore,
   }),
 );
+app.use(CSRFProtection);
 
 // Middleware for getting the user and attaching it to the request
 // Note: For testing purposes before implementing sessions & auth
@@ -90,6 +93,13 @@ app.use(async (req, _res, next) => {
   } catch (err) {
     error(err);
   }
+});
+
+// Setting local variables for the authentication status and csrf token for the views
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.CSRFToken = req.csrfToken();
+  next();
 });
 
 app.use(shopRouter);

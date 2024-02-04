@@ -20,6 +20,7 @@
                       <i class="fa-solid fa-trash"></i>
                     </button>
                     <input type="hidden" name="id" value="<%= product._id %>">
+                    <input type="hidden" name="_csrf" value="<%= CSRFToken %>">
                   </form>
                   <header>
                     <img class="product-img" src="/img/product.jpg" alt="product image" />
@@ -37,6 +38,7 @@
                       <button class="details" type="submit">
                         Edit Product <i class="fa-solid fa-arrow-right-long"></i>
                       </button>
+                      <input type="hidden" name="_csrf" value="<%= CSRFToken %>">
                     </form>
                   </footer>
                 </article>

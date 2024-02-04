@@ -5,14 +5,13 @@ import Order from '../models/order.js';
 import { error } from '../utils/logger.js';
 
 // Handler for displaying the user product list
-export const getProducts: RequestHandler = async (req, res) => {
+export const getProducts: RequestHandler = async (_req, res) => {
   try {
     const products = await Product.find();
     res.render('shop/product-list', {
       products,
       pageTitle: 'All Products',
       path: '/',
-      isAuthenticated: req.session.isLoggedIn,
     });
   } catch (err) {
     error(err);
@@ -32,7 +31,6 @@ export const getProduct: RequestHandler<{ productId: string }> = async (
       product,
       pageTitle: product?.title,
       path: '/',
-      isAuthenticated: req.session.isLoggedIn,
     });
   } catch (err) {
     error(err);
@@ -68,7 +66,6 @@ export const getCart: RequestHandler = async (req, res) => {
         path: '/cart',
         pageTitle: 'Your Cart',
         products: cartItems,
-        isAuthenticated: req.session.isLoggedIn,
       });
     }
   } catch (err) {
@@ -126,7 +123,6 @@ export const getOrders: RequestHandler = async (req, res) => {
         path: '/orders',
         pageTitle: 'Your Orders',
         orders,
-        isAuthenticated: req.session.isLoggedIn,
       });
     }
   } catch (err) {

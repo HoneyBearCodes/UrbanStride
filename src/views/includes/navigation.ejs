@@ -49,6 +49,7 @@
       <form action="/logout" method="post">
         <button class="main-nav-action <%= path === '/login' ? 'active' : '' %>">
           <i class="fa-solid fa-right-from-bracket"></i> Logout
+          <input type="hidden" name="_csrf" value="<%= CSRFToken %>">
         </button>
       </form>
       <% } else { %>
