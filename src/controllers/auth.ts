@@ -1,4 +1,5 @@
 import { RequestHandler } from 'express';
+import bcrypt from 'bcryptjs';
 
 import User from '../models/user.js';
 import { error } from '../utils/logger.js';
@@ -71,8 +72,15 @@ export const postSignup: RequestHandler<
       return res.redirect('/signup');
     }
 
+    // Hashing the password before storing it
+    const hashedPassword = await bcrypt.hash(password, 12);
+
     // Create new user with provided credentials
-    await new User({ email, password, cart: { items: [] } }).save();
+    await new User({
+      email,
+      password: hashedPassword,
+      cart: { items: [] },
+    }).save();
     res.redirect('/login');
   } catch (err) {
     error(err);

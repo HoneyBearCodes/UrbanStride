@@ -93,6 +93,7 @@
   "homepage": "https://github.com/AmaaelTyrneaMitore/UrbanStride#readme",
   "dependencies": {
     "app-root-path": "^3.1.0",
+    "bcryptjs": "^2.4.3",
     "chalk": "^5.3.0",
     "connect-mongodb-session": "^5.0.0",
     "ejs": "^3.1.9",
@@ -101,6 +102,7 @@
     "mongoose": "^8.1.1"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/connect-mongodb-session": "^2.4.7",
     "@types/express": "^4.17.21",
     "@types/express-session": "^1.17.10",
