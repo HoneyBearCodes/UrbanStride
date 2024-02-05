@@ -117,6 +117,17 @@ export const postSignup: RequestHandler<
       return res.redirect('/signup');
     }
 
+    // Hashing the password before storing it
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    // Create new user with provided credentials
+    await new User({
+      email,
+      password: hashedPassword,
+      cart: { items: [] },
+    }).save();
+    res.redirect('/login');
+
     const welcomeMailHTML = compiledWelcomeTemplate({
       email,
       password,
@@ -132,17 +143,6 @@ export const postSignup: RequestHandler<
     };
 
     transporter.sendMail(welcomeMailOptions);
-
-    // Hashing the password before storing it
-    const hashedPassword = await bcrypt.hash(password, 12);
-
-    // Create new user with provided credentials
-    await new User({
-      email,
-      password: hashedPassword,
-      cart: { items: [] },
-    }).save();
-    res.redirect('/login');
   } catch (err) {
     error(err);
   }
@@ -202,4 +202,59 @@ export const postReset: RequestHandler<
       error(err);
     }
   });
+};
+
+// Handler for getting the create new password page
+export const getNewPassword: RequestHandler<{ resetToken: string }> = async (
+  req,
+  res,
+) => {
+  const { resetToken } = req.params;
+
+  try {
+    const user = await User.findOne({
+      resetToken,
+      resetTokenExpiration: { $gt: Date.now() },
+    });
+
+    if (user) {
+      res.render('auth/new-password', {
+        path: '/signup',
+        pageTitle: 'Create new password',
+        errorMessages: req.flash('error'),
+        resetToken,
+        userId: user._id.toString(),
+      });
+    }
+  } catch (err) {
+    error(err);
+  }
+};
+
+// Handler for updating the user's password
+export const postNewPassword: RequestHandler<
+  unknown,
+  unknown,
+  { [key: string]: string }
+> = async (req, res) => {
+  const { pass: newPassword, userId, resetToken } = req.body;
+
+  try {
+    const user = await User.findOne({
+      resetToken,
+      resetTokenExpiration: { $gt: new Date(Date.now()) },
+      _id: userId,
+    });
+
+    if (user) {
+      const hashedNewPassword = await bcrypt.hash(newPassword, 12);
+      user.password = hashedNewPassword;
+      user.resetToken = undefined;
+      user.resetTokenExpiration = undefined;
+      await user.save();
+      res.redirect('/');
+    }
+  } catch (err) {
+    error(err);
+  }
 };
