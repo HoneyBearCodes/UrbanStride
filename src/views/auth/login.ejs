@@ -10,6 +10,9 @@
       <main>
         <div class="container">
           <div class="error">
+            <% if (errorMessages.length > 0) { %>
+             <p class="error-message error-message-popup"><%= errorMessages[0] %></p>
+             <% } %>
             <form action="/login" method="POST" class="form-control container card">
               <div class="inputs">
                 <input type="email" name="email" placeholder="Your email" />

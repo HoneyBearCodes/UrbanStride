@@ -6,6 +6,7 @@ import { connect } from 'mongoose'; // MongoDB connection library
 import session from 'express-session'; // Library for storing sessions
 import { default as connectMongoDBSession } from 'connect-mongodb-session'; // Data store for sessions
 import csrf from 'csurf'; // Package for CSRF protection
+import flash from 'connect-flash'; // Package for flashing error messages
 
 // Custom utility functions for logging and getting IP addresses
 import { bold, italic, log, underline, error } from './utils/logger.js';
@@ -63,6 +64,7 @@ app.set('views', join(rootDir, 'src', 'views'));
 // Parse incoming request bodies with urlencoded payloads and
 // Serve static files from the 'public' directory
 // Initialize the session and the CSRF protection
+// Initialize connect-flash for flashing error messages using the session
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(join(rootDir, 'public')));
 app.use(
@@ -74,6 +76,7 @@ app.use(
   }),
 );
 app.use(CSRFProtection);
+app.use(flash());
 
 // Middleware for getting the user and attaching it to the request
 // Note: For testing purposes before implementing sessions & auth

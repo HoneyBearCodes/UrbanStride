@@ -12,6 +12,7 @@ export const getLogin: RequestHandler = (req, res) => {
     res.render('auth/login', {
       path: '/login',
       pageTitle: 'Login',
+      errorMessages: req.flash('error'),
     });
   }
 };
@@ -38,9 +39,11 @@ export const postLogin: RequestHandler<
         // Not necessary but required to make sure only redirect after session created
         req.session.save(() => res.redirect('/'));
       } else {
+        req.flash('error', 'Invalid email or password.');
         res.redirect('/login');
       }
     } else {
+      req.flash('error', 'Invalid email or password.');
       res.redirect('/login');
     }
   } catch (err) {
@@ -67,6 +70,7 @@ export const getSignup: RequestHandler = (req, res) => {
     res.render('auth/signup', {
       path: '/signup',
       pageTitle: 'Signup',
+      errorMessages: req.flash('error'),
     });
   }
 };
@@ -84,6 +88,7 @@ export const postSignup: RequestHandler<
     const user = await User.findOne({ email: email });
     if (user) {
       // User already exists
+      req.flash('error', 'E-mail already in use. Pick a different one.');
       return res.redirect('/signup');
     }
 
