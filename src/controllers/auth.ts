@@ -1,5 +1,6 @@
 import { join } from 'path';
 import { readFileSync } from 'fs';
+import { randomBytes } from 'crypto';
 
 import { RequestHandler } from 'express';
 import bcrypt from 'bcryptjs';
@@ -15,6 +16,10 @@ const rootDir = appRootPath.toString();
 const welcomeMailTemplatePath = join(rootDir, 'src', 'emails', 'welcome.ejs');
 const welcomeMailTemplate = readFileSync(welcomeMailTemplatePath, 'utf-8');
 const compiledWelcomeTemplate = compile(welcomeMailTemplate);
+
+const resetMailTemplatePath = join(rootDir, 'src', 'emails', 'reset.ejs');
+const resetMailTemplate = readFileSync(resetMailTemplatePath, 'utf-8');
+const compiledResetTemplate = compile(resetMailTemplate);
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -141,4 +146,60 @@ export const postSignup: RequestHandler<
   } catch (err) {
     error(err);
   }
+};
+
+// Handler for getting the password reset page
+export const getReset: RequestHandler = (req, res) => {
+  res.render('auth/reset', {
+    path: '/signup',
+    pageTitle: 'Reset Password',
+    errorMessages: req.flash('error'),
+  });
+};
+
+// Handler for resetting the user's password
+export const postReset: RequestHandler<
+  unknown,
+  unknown,
+  { [key: string]: string }
+> = (req, res) => {
+  const { email } = req.body;
+
+  randomBytes(32, async (err, buffer) => {
+    if (err) {
+      error(err);
+      return res.redirect('/');
+    }
+
+    const resetToken = buffer.toString('hex');
+
+    try {
+      const user = await User.findOne({ email: email });
+      if (!user) {
+        req.flash('error', 'No account with that email found.');
+        return res.redirect('/reset');
+      }
+      user.resetToken = resetToken;
+      user.resetTokenExpiration = new Date(Date.now() + 10800000);
+      await user.save();
+
+      const resetMailHTML = compiledResetTemplate({
+        resetToken,
+        currentYear: new Date().getFullYear(),
+      });
+
+      const resetMailOptions = {
+        from: `"Urban Stride" <${process.env.GMAIL_USER}>`,
+        to: email,
+        subject: 'Reset Your Password',
+        text: 'Password reset link',
+        html: resetMailHTML,
+      };
+
+      transporter.sendMail(resetMailOptions);
+      res.redirect('/');
+    } catch (err) {
+      error(err);
+    }
+  });
 };

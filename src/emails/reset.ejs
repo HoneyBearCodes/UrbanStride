@@ -252,7 +252,7 @@
                           margin-bottom: 24px;
                         "
                       >
-                        Signup Successful 🥳🎉!
+                        Forgot your password?
                       </h2>
 
                       <p
@@ -266,9 +266,11 @@
                           line-height: 28px;
                         "
                       >
-                        Thanks for trying UrbanStride. We’re thrilled to have
-                        you on board. Click on the button below to login to your
-                        account:
+                        We all forget our password sometimes. Don't worry, click
+                        the button below to reset your password.
+                        <strong
+                          >This link is only valid for the next 3 hours.</strong
+                        >
                       </p>
 
                       <table
@@ -319,7 +321,7 @@
                                   "
                                 >
                                   <a
-                                    href="#"
+                                    href="http://localhost:3000/reset/<%= resetToken %>"
                                     target="_blank"
                                     style="
                                       background-color: #f72585;
@@ -338,7 +340,7 @@
                                       line-height: 21px;
                                       letter-spacing: 0.25px;
                                     "
-                                    >Click here to Login</a
+                                    >Reset Password</a
                                   >
                                 </td>
                               </tr>
@@ -358,7 +360,9 @@
                           line-height: 28px;
                         "
                       >
-                        Your account is set up with the following credentials:
+                        If this is not done by you then please ignore this
+                        email. Someone else might've entered your email
+                        accidentally.
                       </p>
 
                       <table
@@ -367,66 +371,7 @@
                         cellspacing="0"
                         role="presentation"
                         style="border-collapse: collapse"
-                      >
-                        <tr>
-                          <td
-                            class="info"
-                            style="
-                              word-break: break-word;
-                              font-family: 'Inter', Helvetica, Arial, sans-serif;
-                              font-size: 16px;
-                              line-height: 24px;
-                              padding-top: 20px;
-                              padding-bottom: 20px;
-                              padding-right: 20px;
-                              padding-left: 20px;
-                              border-radius: 4px;
-                              background-color: #f4f7fa;
-                            "
-                          >
-                            <table
-                              width="100%"
-                              cellpadding="0"
-                              cellspacing="0"
-                              role="presentation"
-                              style="border-collapse: collapse"
-                            >
-                              <tr>
-                                <td
-                                  style="
-                                    word-break: break-word;
-                                    font-family: 'Inter', Helvetica, Arial,
-                                      sans-serif;
-                                    font-size: 16px;
-                                    line-height: 24px;
-                                  "
-                                >
-                                  <strong style="font-weight: 600"
-                                    >Email:</strong
-                                  >
-                                  <%= email %>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td
-                                  style="
-                                    word-break: break-word;
-                                    font-family: 'Inter', Helvetica, Arial,
-                                      sans-serif;
-                                    font-size: 16px;
-                                    line-height: 24px;
-                                  "
-                                >
-                                  <strong style="font-weight: 600"
-                                    >Password:</strong
-                                  >
-                                  <%= password %>
-                                </td>
-                              </tr>
-                            </table>
-                          </td>
-                        </tr>
-                      </table>
+                      ></table>
 
                       <p
                         style="
@@ -514,7 +459,7 @@
                           line-height: 21px;
                         "
                       >
-                        TODO: add login url after hosting
+                        http://localhost:3000/reset/<%= resetToken %>
                       </p>
                     </td>
                   </tr>

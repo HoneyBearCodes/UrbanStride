@@ -15,6 +15,8 @@ interface CartItem {
 export interface UserDocument extends Document {
   email: string;
   password: string;
+  resetToken: string;
+  resetTokenExpiration: Date;
   cart: {
     items: CartItem[];
   };
@@ -42,6 +44,8 @@ const usesrSchema = new Schema<UserDocument>({
       },
     ],
   },
+  resetToken: { type: String, required: true },
+  resetTokenExpiration: { type: Date, required: true },
 });
 
 // Utility method to add an item to the user's cart
