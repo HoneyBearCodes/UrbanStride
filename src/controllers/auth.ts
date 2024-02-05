@@ -1,8 +1,28 @@
+import { join } from 'path';
+import { readFileSync } from 'fs';
+
 import { RequestHandler } from 'express';
 import bcrypt from 'bcryptjs';
+import nodemailer from 'nodemailer';
+import appRootPath from 'app-root-path';
+import { compile } from 'ejs';
 
 import User from '../models/user.js';
 import { error } from '../utils/logger.js';
+
+const rootDir = appRootPath.toString();
+
+const welcomeMailTemplatePath = join(rootDir, 'src', 'emails', 'welcome.ejs');
+const welcomeMailTemplate = readFileSync(welcomeMailTemplatePath, 'utf-8');
+const compiledWelcomeTemplate = compile(welcomeMailTemplate);
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASS,
+  },
+});
 
 // Handler for fetching and displaying orders
 export const getLogin: RequestHandler = (req, res) => {
@@ -91,6 +111,22 @@ export const postSignup: RequestHandler<
       req.flash('error', 'E-mail already in use. Pick a different one.');
       return res.redirect('/signup');
     }
+
+    const welcomeMailHTML = compiledWelcomeTemplate({
+      email,
+      password,
+      currentYear: new Date().getFullYear(),
+    });
+
+    const welcomeMailOptions = {
+      from: `"Urban Stride" <${process.env.GMAIL_USER}>`,
+      to: email,
+      subject: 'Signup Successful🥳!',
+      text: 'Signup successful.',
+      html: welcomeMailHTML,
+    };
+
+    transporter.sendMail(welcomeMailOptions);
 
     // Hashing the password before storing it
     const hashedPassword = await bcrypt.hash(password, 12);
