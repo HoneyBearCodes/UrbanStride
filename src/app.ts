@@ -9,7 +9,7 @@ import csrf from 'csurf'; // Package for CSRF protection
 import flash from 'connect-flash'; // Package for flashing error messages
 
 // Custom utility functions for logging and getting IP addresses
-import { bold, italic, log, underline, error } from './utils/logger.js';
+import { bold, italic, underline, error, log } from './utils/logger.js';
 import { getPrivateIpAddress } from './utils/getIp.js';
 
 // Controller for handling 404 errors
@@ -115,19 +115,16 @@ app.use(get404);
 try {
   // Connect to the MongoDB database
   await connect(MONGODB_URI);
-  log({
-    clearConsole: true,
-    message: `Successfully connected to the ${bold(italic(process.env.MONGO_DEFAULT_DB))} database...`,
-  });
+  log(
+    `Successfully connected to the ${bold(italic(underline(process.env.MONGO_DEFAULT_DB)))} database...`,
+  );
 
   // Start the Express server
   app.listen(PORT, () => {
-    log({
-      message: `Server started at port: ${italic(underline(PORT))}`,
-    });
-    log({
-      message: `Visit the server locally at: ${italic(underline(`http://${getPrivateIpAddress()}:${PORT}/`))}`,
-    });
+    log(`Server started at port: ${italic(underline(PORT))}`);
+    log(
+      `Visit the server locally at: ${italic(underline(`http://${getPrivateIpAddress()}:${PORT}/`))}`,
+    );
   });
 } catch (err) {
   // Handle any errors that occur during server startup or database connection

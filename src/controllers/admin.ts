@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 
 import Product, { ProductDocument } from '../models/product.js';
-import { error, log } from '../utils/logger.js';
+import { error } from '../utils/logger.js';
 
 // Handler for rendering the product list for the '/admin/product-list'
 export const getProducts: RequestHandler = async (req, res) => {
@@ -49,10 +49,6 @@ export const postAddProduct: RequestHandler<
   try {
     // Save the product to the database
     await product.save();
-
-    // Log a success message and the created product
-    log({ message: 'Product successfully created' });
-    log({ object: product });
   } catch (err) {
     // If an error occurs, log it
     error(err);
