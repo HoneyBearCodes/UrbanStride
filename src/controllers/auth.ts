@@ -1,33 +1,11 @@
-import { join } from 'path';
-import { readFileSync } from 'fs';
 import { randomBytes } from 'crypto';
 
 import { RequestHandler } from 'express';
 import bcrypt from 'bcryptjs';
-import nodemailer from 'nodemailer';
-import appRootPath from 'app-root-path';
-import { compile } from 'ejs';
 
 import User from '../models/user.js';
 import { error } from '../utils/logger.js';
-
-const rootDir = appRootPath.toString();
-
-const welcomeMailTemplatePath = join(rootDir, 'src', 'emails', 'welcome.ejs');
-const welcomeMailTemplate = readFileSync(welcomeMailTemplatePath, 'utf-8');
-const compiledWelcomeTemplate = compile(welcomeMailTemplate);
-
-const resetMailTemplatePath = join(rootDir, 'src', 'emails', 'reset.ejs');
-const resetMailTemplate = readFileSync(resetMailTemplatePath, 'utf-8');
-const compiledResetTemplate = compile(resetMailTemplate);
-
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASS,
-  },
-});
+import { compileTemplate, transporter } from '../utils/emailService.js';
 
 // Handler for fetching and displaying orders
 export const getLogin: RequestHandler = (req, res) => {
@@ -128,7 +106,7 @@ export const postSignup: RequestHandler<
     }).save();
     res.redirect('/login');
 
-    const welcomeMailHTML = compiledWelcomeTemplate({
+    const welcomeMailHTML = compileTemplate('welcome', {
       email,
       password,
       currentYear: new Date().getFullYear(),
@@ -183,7 +161,7 @@ export const postReset: RequestHandler<
       user.resetTokenExpiration = new Date(Date.now() + 10800000);
       await user.save();
 
-      const resetMailHTML = compiledResetTemplate({
+      const resetMailHTML = compileTemplate('reset', {
         resetToken,
         currentYear: new Date().getFullYear(),
       });
