@@ -2,6 +2,7 @@ import { randomBytes } from 'crypto';
 
 import { RequestHandler } from 'express';
 import bcrypt from 'bcryptjs';
+import { validationResult } from 'express-validator';
 
 import User from '../models/user.js';
 import { error } from '../utils/logger.js';
@@ -79,22 +80,21 @@ export const getSignup: RequestHandler = (req, res) => {
 };
 
 // Handler for signing up users
-export const postSignup: RequestHandler<
-  unknown,
-  unknown,
-  { [key: string]: string }
-> = async (req, res) => {
-  const { email, pass: password, confirmPass: _confirmPassword } = req.body;
+export const postSignup: RequestHandler = async (req, res) => {
+  const { email, pass: password } = req.body;
+  const validationErrors = validationResult(req);
+
+  if (!validationErrors.isEmpty()) {
+    const errorMessages = validationErrors.array().map((item) => item.msg);
+    return res.status(422).render('auth/signup', {
+      path: '/signup',
+      pageTitle: 'Signup',
+      errorMessages: errorMessages,
+    });
+  }
 
   // Check if any user with provided email already exists
   try {
-    const user = await User.findOne({ email: email });
-    if (user) {
-      // User already exists
-      req.flash('error', 'E-mail already in use. Pick a different one.');
-      return res.redirect('/signup');
-    }
-
     // Hashing the password before storing it
     const hashedPassword = await bcrypt.hash(password, 12);
 

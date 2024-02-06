@@ -15,9 +15,9 @@
               <% } %>
             <form action="/signup" method="POST" class="form-control container card">
               <div class="inputs">
-                <input type="email" name="email" placeholder="Your email" />
-                <input type="password" name="pass" placeholder="Your password" />
-                <input type="password" name="confirmPass" placeholder="Confirm password" />
+                <input type="email" name="email" placeholder="Your email"/>
+                <input type="password" name="pass" placeholder="Your password" minlength="8" maxlength="12" />
+                <input type="password" name="confirmPass" placeholder="Confirm password" minlength="8" maxlength="12" />
                 <button class="submit-btn" type="submit">Create Account <i class="fa-solid fa-arrow-right-long"></i></button>
               </div>
               <input type="hidden" name="_csrf" value="<%= CSRFToken %>">
