@@ -6,7 +6,7 @@ import { error } from '../utils/logger.js';
 // Handler for rendering the product list for the '/admin/product-list'
 export const getProducts: RequestHandler = async (req, res) => {
   try {
-    const products = await Product.find();
+    const products = await Product.find({ userId: req.user._id });
     res.render('admin/product-list', {
       products,
       pageTitle: 'Admin Products',
@@ -74,8 +74,8 @@ export const getEditProduct: RequestHandler<
 
   try {
     const product = await Product.findById(productId);
-    if (!product) {
-      return res.redirect('/');
+    if (!product || product.userId.toString() !== req.user._id.toString()) {
+      return res.redirect('/admin/products');
     }
 
     res.render('admin/edit-product', {
@@ -105,7 +105,7 @@ export const postEditProduct: RequestHandler<
 
   try {
     const product = await Product.findById(productId);
-    if (product) {
+    if (product && product.userId.toString() === req.user._id.toString()) {
       product.title = updatedTitle;
       product.price = Number(updatedPrice);
       product.description = updatedDescription;
@@ -125,7 +125,7 @@ export const postDeleteProduct: RequestHandler<
 > = async (req, res) => {
   const { id: productId } = req.body;
   try {
-    await Product.findByIdAndDelete(productId);
+    await Product.deleteOne({ _id: productId, userId: req.user._id });
   } catch (err) {
     error(err);
   }
