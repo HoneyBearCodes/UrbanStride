@@ -22,11 +22,7 @@ export const getLogin: RequestHandler = (req, res) => {
 };
 
 // Handler for logging in the users
-export const postLogin: RequestHandler<
-  unknown,
-  unknown,
-  { [key: string]: string }
-> = async (req, res) => {
+export const postLogin: RequestHandler = async (req, res) => {
   const { email, pass: password } = req.body;
 
   try {
@@ -75,21 +71,38 @@ export const getSignup: RequestHandler = (req, res) => {
       path: '/signup',
       pageTitle: 'Signup',
       errorMessages: req.flash('error'),
+      invalidFields: [],
+      oldInput: {
+        email: '',
+        pass: '',
+        confirmPass: '',
+      },
     });
   }
 };
 
 // Handler for signing up users
 export const postSignup: RequestHandler = async (req, res) => {
-  const { email, pass: password } = req.body;
+  const { email, pass: password, confirmPass } = req.body;
   const validationErrors = validationResult(req);
 
   if (!validationErrors.isEmpty()) {
-    const errorMessages = validationErrors.array().map((item) => item.msg);
+    const errorMessages = validationErrors.array().map((error) => error.msg);
+    const invalidFields = validationErrors.array().map((error) => {
+      if (error.type === 'field') {
+        return error.path;
+      }
+    });
     return res.status(422).render('auth/signup', {
       path: '/signup',
       pageTitle: 'Signup',
-      errorMessages: errorMessages,
+      errorMessages,
+      invalidFields,
+      oldInput: {
+        email,
+        pass: password,
+        confirmPass,
+      },
     });
   }
 
