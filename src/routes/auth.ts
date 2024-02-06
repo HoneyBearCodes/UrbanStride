@@ -16,7 +16,10 @@ import User from '../models/user.js';
 
 const authRouter = Router();
 
-authRouter.route('/login').get(getLogin).post(postLogin);
+authRouter
+  .route('/login')
+  .get(getLogin)
+  .post([body('email').normalizeEmail().trim()], postLogin);
 
 authRouter.post('/logout', postLogout);
 
@@ -34,16 +37,21 @@ authRouter
             // User already exists
             throw new Error('E-mail already in use. Pick a different one.');
           }
+        })
+        .normalizeEmail()
+        .trim(),
+      body('pass', 'Password should beand between 8 to 12 characters.')
+        .isLength({ min: 8, max: 12 })
+        .trim(),
+      body('confirmPass')
+        .trim()
+        .custom((value, { req }) => {
+          if (value !== req.body.pass) {
+            console.log('WTF!');
+            throw new Error('Passwords must match!');
+          }
+          return true;
         }),
-      body(
-        'pass',
-        'Password should beand between 8 to 12 characters.',
-      ).isLength({ min: 8, max: 12 }),
-      body('confirmPass').custom((value, { req }) => {
-        if (value !== req.body.pass) {
-          throw new Error('Passwords must match!');
-        }
-      }),
     ],
     postSignup,
   );
