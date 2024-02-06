@@ -15,8 +15,8 @@
              <% } %>
             <form action="/login" method="POST" class="form-control container card">
               <div class="inputs">
-                <input type="email" name="email" placeholder="Your email" />
-                <input type="password" name="pass" placeholder="Your password" />
+                <input class="<%= invalidFields.includes('email') ? 'err' : '' %>" type="email" name="email" placeholder="Your email" minlength="8" maxlength="12" value="<%= oldInput.email %>" onInput="this.classList.remove('err')" />
+                <input class="<%= invalidFields.includes('pass') ? 'err' : '' %>" type="password" name="pass"  placeholder="Your password" minlength="8" maxlength="12" value="<%= oldInput.pass %>" onInput="this.classList.remove('err')" />
                 <button class="submit-btn" type="submit"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
                 <a class="reset" href="/reset">Forgot Password?</a>
               </div>

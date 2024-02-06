@@ -17,6 +17,11 @@ export const getLogin: RequestHandler = (req, res) => {
       path: '/login',
       pageTitle: 'Login',
       errorMessages: req.flash('error'),
+      invalidFields: [],
+      oldInput: {
+        email: '',
+        pass: '',
+      },
     });
   }
 };
@@ -24,6 +29,26 @@ export const getLogin: RequestHandler = (req, res) => {
 // Handler for logging in the users
 export const postLogin: RequestHandler = async (req, res) => {
   const { email, pass: password } = req.body;
+  const validationErrors = validationResult(req);
+
+  if (!validationErrors.isEmpty()) {
+    const errorMessages = validationErrors.array().map((error) => error.msg);
+    const invalidFields = validationErrors.array().map((error) => {
+      if (error.type === 'field') {
+        return error.path;
+      }
+    });
+    return res.status(422).render('auth/signup', {
+      path: '/signup',
+      pageTitle: 'Signup',
+      errorMessages,
+      invalidFields,
+      oldInput: {
+        email,
+        pass: password,
+      },
+    });
+  }
 
   try {
     // finding user that matches the provided email
@@ -39,12 +64,28 @@ export const postLogin: RequestHandler = async (req, res) => {
         // Not necessary but required to make sure only redirect after session created
         req.session.save(() => res.redirect('/'));
       } else {
-        req.flash('error', 'Invalid email or password.');
-        res.redirect('/login');
+        return res.status(422).render('auth/login', {
+          path: '/signup',
+          pageTitle: 'Signup',
+          errorMessages: ['Invalid email or password.'],
+          invalidFields: ['email', 'pass'],
+          oldInput: {
+            email,
+            pass: password,
+          },
+        });
       }
     } else {
-      req.flash('error', 'Invalid email or password.');
-      res.redirect('/login');
+      return res.status(422).render('auth/login', {
+        path: '/signup',
+        pageTitle: 'Signup',
+        errorMessages: ['Invalid email or password.'],
+        invalidFields: ['email', 'pass'],
+        oldInput: {
+          email,
+          pass: password,
+        },
+      });
     }
   } catch (err) {
     error(err);
