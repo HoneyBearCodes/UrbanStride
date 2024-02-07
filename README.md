@@ -18,6 +18,36 @@ Urban Stride is a dynamic sports shoe e-commerce platform developed with TypeScr
 - 🌐 RESTful API for smooth interactions
 - 📊 MongoDB for efficient data storage and retrieval
 
+## Feature Highlight: Custom Logger Utility 📝
+
+Enhance your debugging experience with Urban Stride's custom logger utility! This lightweight and versatile logging module is designed for effective debugging and logging within your Node.js applications. The custom logger utility includes:
+
+- **Customizable Logging Levels:** Supports three logging levels - `log`, `warn`, and `error`, each associated with unique styling for improved readability.
+
+- **File, Line, and Column Information:** Intelligently captures and displays the file name, line number, and column number of the calling code for detailed log origin information.
+
+- **Styling Options:** Leverages the `chalk` library to apply styling to log messages, making it easy to distinguish between different log levels.
+
+- **Flexible Usage:** A single, smart, and scalable function accommodates various content types, including strings, objects, and error messages. Adapts its behavior based on the provided content and log level.
+
+- **Ease of Integration:** Easy to integrate into Node.js projects for seamless logging during development and production.
+
+### Usage
+
+```typescript
+import { log, warn, error } from './path-to-logger/logger';
+
+// Example usage:
+log('This is a log message.');
+warn('This is a warning.');
+error('This is an error.');
+
+// You can also use it with variables and objects:
+const obj = { key: 'value' };
+log('Object:', obj);
+error(new Error('This is an error object.'));
+```
+
 ## Tech Stack 💻
 
 - Backend: Node.js, Express.js
