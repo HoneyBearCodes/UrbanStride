@@ -9,15 +9,44 @@
       <!-- MAIN CONTENT -->
       <main>
         <div class="container">
-          <form action="/admin/<%= editing ? 'edit-product' : 'add-product'%>" method="POST"
-            class="form-control grid grid--2-cols">
+          <% if (errorMessages.length > 0) { %>
+            <p class="error-message error-message-popup"><%= errorMessages[0] %></p>
+            <% } %>
+          <form 
+            action="/admin/<%= editing ? 'edit-product' : 'add-product'%>" 
+            method="POST" 
+            class="form-control grid grid--2-cols"
+            >
             <div class="inputs">
-              <input type="text" name="title" placeholder="Enter product title"
-                value="<%= editing ? product.title : '' %>" />
-              <input type="number" name="price" placeholder="Enter product price" step="0.01"
-                value="<%= editing ? product.price : '' %>" />
-              <textarea name="description" rows="10" placeholder="Enter product description.">
-                <%= editing ? product.description : '' %>
+              <input 
+                class="<%= invalidFields.includes('title') ? 'err' : '' %>" 
+                type="text" 
+                name="title" 
+                placeholder="Enter product title" 
+                minlength="5" 
+                maxlength="30"
+                value="<%= (editing || errorMessages.length > 0) ? product.title : '' %>"
+                onInput="this.classList.remove('err')"
+               />
+              <input 
+                class="<%= invalidFields.includes('price') ? 'err' : '' %>" 
+                type="number" 
+                name="price" 
+                placeholder="Enter product price" 
+                step="0.01" 
+                min="1" 
+                max="99999"
+                value="<%= (editing || errorMessages.length > 0) ? product.price : '' %>"
+                onInput="this.classList.remove('err')" />
+              <textarea 
+                class="<%= invalidFields.includes('description') ? 'err' : '' %>" 
+                name="description" 
+                rows="10" 
+                placeholder="Enter product description." 
+                minlength="5"
+                onInput="this.classList.remove('err')"
+                >
+                  <%= (editing || errorMessages.length > 0) ? product.description : '' %>
               </textarea>
               <button class="submit-btn" type="submit">
                 <%= editing ? 'Save Changes' : 'Add Product' %>

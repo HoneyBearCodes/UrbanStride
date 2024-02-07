@@ -1,6 +1,7 @@
 import { RequestHandler } from 'express';
+import { validationResult } from 'express-validator';
 
-import Product, { ProductDocument } from '../models/product.js';
+import Product from '../models/product.js';
 import { error } from '../utils/logger.js';
 
 // Handler for rendering the product list for the '/admin/product-list'
@@ -25,16 +26,37 @@ export const getAddProduct: RequestHandler = (req, res) => {
     path: '/admin/edit-product',
     editing: false,
     isAuthenticated: req.session.isLoggedIn,
+    errorMessages: [],
+    invalidFields: [],
   });
 };
 
 // Handler for processing the submission of a new product
-export const postAddProduct: RequestHandler<
-  unknown,
-  unknown,
-  ProductDocument
-> = async (req, res) => {
+export const postAddProduct: RequestHandler = async (req, res) => {
   const { title, price, description } = req.body;
+
+  const validationErrors = validationResult(req);
+
+  if (!validationErrors.isEmpty()) {
+    const errorMessages = validationErrors.array().map((error) => error.msg);
+    const invalidFields = validationErrors.array().map((error) => {
+      if (error.type === 'field') {
+        return error.path;
+      }
+    });
+    return res.status(422).render('admin/edit-product', {
+      path: '/admin/edit-product',
+      pageTitle: 'Add Product',
+      editing: false,
+      errorMessages,
+      invalidFields,
+      product: {
+        title,
+        price,
+        description,
+      },
+    });
+  }
 
   // Create a new product with the data submitted by user
   const product = new Product({
@@ -84,6 +106,8 @@ export const getEditProduct: RequestHandler<
       editing: editMode,
       product,
       isAuthenticated: req.session.isLoggedIn,
+      errorMessages: [],
+      invalidFields: [],
     });
   } catch (err) {
     error(err);
@@ -91,17 +115,37 @@ export const getEditProduct: RequestHandler<
 };
 
 // Handler for updating the edited product details
-export const postEditProduct: RequestHandler<
-  unknown,
-  unknown,
-  { [key: string]: string }
-> = async (req, res) => {
+export const postEditProduct: RequestHandler = async (req, res) => {
   const {
     id: productId,
     title: updatedTitle,
     price: updatedPrice,
     description: updatedDescription,
   } = req.body;
+
+  const validationErrors = validationResult(req);
+
+  if (!validationErrors.isEmpty()) {
+    const errorMessages = validationErrors.array().map((error) => error.msg);
+    const invalidFields = validationErrors.array().map((error) => {
+      if (error.type === 'field') {
+        return error.path;
+      }
+    });
+    return res.status(422).render('admin/edit-product', {
+      path: '/admin/edit-product',
+      pageTitle: 'Edit Product',
+      editing: true,
+      errorMessages,
+      invalidFields,
+      product: {
+        title: updatedTitle,
+        price: updatedPrice,
+        description: updatedDescription,
+        _id: productId,
+      },
+    });
+  }
 
   try {
     const product = await Product.findById(productId);
