@@ -47,7 +47,6 @@ authRouter
         .trim()
         .custom((value, { req }) => {
           if (value !== req.body.pass) {
-            console.log('WTF!');
             throw new Error('Passwords must match!');
           }
           return true;
