@@ -13,7 +13,7 @@ Urban Stride is a dynamic sports shoe e-commerce platform developed with TypeScr
 - 🛍️ Curated collection of trendy sports shoes
 - 🛒 Seamless e-commerce experience with Stripe integration
 - 📦 PDF order confirmation using PDFKit
-- ✉️ Email notifications powered by SendGrid
+- ✉️ Email notifications powered by Nodemailer
 - 🔒 Secure user sessions and cookies management + CSRF Protection
 - 🌐 RESTful API for smooth interactions
 - 📊 MongoDB for efficient data storage and retrieval
