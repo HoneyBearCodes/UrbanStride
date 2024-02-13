@@ -2,10 +2,10 @@ import { RequestHandler } from 'express';
 
 import Product from '../models/product.js';
 import Order from '../models/order.js';
-import { error } from '../utils/logger.js';
+import { handleError } from '../utils/errorHandler.js';
 
 // Handler for displaying the user product list
-export const getProducts: RequestHandler = async (_req, res) => {
+export const getProducts: RequestHandler = async (_req, res, next) => {
   try {
     const products = await Product.find();
     res.render('shop/product-list', {
@@ -14,15 +14,12 @@ export const getProducts: RequestHandler = async (_req, res) => {
       path: '/',
     });
   } catch (err) {
-    error(err);
+    handleError(err, next);
   }
 };
 
 // Handler for getting on product (for product details)
-export const getProduct: RequestHandler<{ productId: string }> = async (
-  req,
-  res,
-) => {
+export const getProduct: RequestHandler = async (req, res, next) => {
   const { productId } = req.params;
 
   try {
@@ -33,16 +30,12 @@ export const getProduct: RequestHandler<{ productId: string }> = async (
       path: '/',
     });
   } catch (err) {
-    error(err);
+    handleError(err, next);
   }
 };
 
 // Handler for adding item to cart
-export const postCart: RequestHandler<
-  unknown,
-  unknown,
-  { productId: string }
-> = async (req, res) => {
+export const postCart: RequestHandler = async (req, res, next) => {
   const { productId } = req.body;
   try {
     const product = await Product.findById(productId);
@@ -51,13 +44,13 @@ export const postCart: RequestHandler<
       req.user.addToCart(product);
     }
   } catch (err) {
-    error(err);
+    handleError(err, next);
   }
   res.redirect('/cart');
 };
 
 // Handling for displaying all the cart items
-export const getCart: RequestHandler = async (req, res) => {
+export const getCart: RequestHandler = async (req, res, next) => {
   try {
     const user = await req.user.populate('cart.items.productId');
     const cartItems = user.cart.items;
@@ -69,27 +62,23 @@ export const getCart: RequestHandler = async (req, res) => {
       });
     }
   } catch (err) {
-    error(err);
+    handleError(err, next);
   }
 };
 
 // Handler for deleting a cart item
-export const postCartDeleteItem: RequestHandler<
-  unknown,
-  unknown,
-  { productId: string }
-> = async (req, res) => {
+export const postCartDeleteItem: RequestHandler = async (req, res, next) => {
   const { productId } = req.body;
   try {
     req.user.removeFromCart(productId);
   } catch (err) {
-    error(err);
+    handleError(err, next);
   }
   res.redirect('/cart');
 };
 
 // Handler for creating an order
-export const postOrder: RequestHandler = async (req, res) => {
+export const postOrder: RequestHandler = async (req, res, next) => {
   try {
     const user = await req.user.populate('cart.items.productId');
     const cartItems = user.cart.items.map(({ productId, quantity }) => ({
@@ -109,13 +98,13 @@ export const postOrder: RequestHandler = async (req, res) => {
       req.user.clearCart();
     }
   } catch (err) {
-    error(err);
+    handleError(err, next);
   }
   res.redirect('/orders');
 };
 
 // Handler for fetching and displaying orders
-export const getOrders: RequestHandler = async (req, res) => {
+export const getOrders: RequestHandler = async (req, res, next) => {
   try {
     const orders = await Order.find({ 'user.id': req.user._id });
     if (orders) {
@@ -126,6 +115,6 @@ export const getOrders: RequestHandler = async (req, res) => {
       });
     }
   } catch (err) {
-    error(err);
+    handleError(err, next);
   }
 };

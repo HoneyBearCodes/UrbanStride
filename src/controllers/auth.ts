@@ -6,6 +6,7 @@ import { validationResult } from 'express-validator';
 
 import User from '../models/user.js';
 import { error } from '../utils/logger.js';
+import { handleError } from '../utils/errorHandler.js';
 import { compileTemplate, transporter } from '../utils/emailService.js';
 
 // Handler for fetching and displaying orders
@@ -27,7 +28,7 @@ export const getLogin: RequestHandler = (req, res) => {
 };
 
 // Handler for logging in the users
-export const postLogin: RequestHandler = async (req, res) => {
+export const postLogin: RequestHandler = async (req, res, next) => {
   const { email, pass: password } = req.body;
   const validationErrors = validationResult(req);
 
@@ -88,8 +89,7 @@ export const postLogin: RequestHandler = async (req, res) => {
       });
     }
   } catch (err) {
-    error(err);
-    res.redirect('/login');
+    handleError(err, next);
   }
 };
 
@@ -123,7 +123,7 @@ export const getSignup: RequestHandler = (req, res) => {
 };
 
 // Handler for signing up users
-export const postSignup: RequestHandler = async (req, res) => {
+export const postSignup: RequestHandler = async (req, res, next) => {
   const { email, pass: password, confirmPass } = req.body;
   const validationErrors = validationResult(req);
 
@@ -176,7 +176,7 @@ export const postSignup: RequestHandler = async (req, res) => {
 
     transporter.sendMail(welcomeMailOptions);
   } catch (err) {
-    error(err);
+    handleError(err, next);
   }
 };
 
@@ -190,11 +190,7 @@ export const getReset: RequestHandler = (req, res) => {
 };
 
 // Handler for resetting the user's password
-export const postReset: RequestHandler<
-  unknown,
-  unknown,
-  { [key: string]: string }
-> = (req, res) => {
+export const postReset: RequestHandler = (req, res, next) => {
   const { email } = req.body;
 
   randomBytes(32, async (err, buffer) => {
@@ -231,16 +227,13 @@ export const postReset: RequestHandler<
       transporter.sendMail(resetMailOptions);
       res.redirect('/');
     } catch (err) {
-      error(err);
+      handleError(err, next);
     }
   });
 };
 
 // Handler for getting the create new password page
-export const getNewPassword: RequestHandler<{ resetToken: string }> = async (
-  req,
-  res,
-) => {
+export const getNewPassword: RequestHandler = async (req, res, next) => {
   const { resetToken } = req.params;
 
   try {
@@ -259,16 +252,12 @@ export const getNewPassword: RequestHandler<{ resetToken: string }> = async (
       });
     }
   } catch (err) {
-    error(err);
+    handleError(err, next);
   }
 };
 
 // Handler for updating the user's password
-export const postNewPassword: RequestHandler<
-  unknown,
-  unknown,
-  { [key: string]: string }
-> = async (req, res) => {
+export const postNewPassword: RequestHandler = async (req, res, next) => {
   const { pass: newPassword, userId, resetToken } = req.body;
 
   try {
@@ -287,6 +276,6 @@ export const postNewPassword: RequestHandler<
       res.redirect('/');
     }
   } catch (err) {
-    error(err);
+    handleError(err, next);
   }
 };

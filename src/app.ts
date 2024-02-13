@@ -1,6 +1,6 @@
 import { join } from 'path'; // Path module for file path operations
 
-import express from 'express'; // Express framework for handling HTTP requests
+import express, { NextFunction, Request, Response } from 'express'; // Express framework for handling HTTP requests
 import appRootPath from 'app-root-path'; // Library for getting the root path of the application
 import { connect } from 'mongoose'; // MongoDB connection library
 import session from 'express-session'; // Library for storing sessions
@@ -11,9 +11,10 @@ import flash from 'connect-flash'; // Package for flashing error messages
 // Custom utility functions for logging and getting IP addresses
 import { bold, italic, underline, error, log } from './utils/logger.js';
 import { getPrivateIpAddress } from './utils/getIp.js';
+import { handleError } from './utils/errorHandler.js';
 
 // Controller for handling 404 errors
-import { get404 } from './controllers/errors.js';
+import { get404, get500 } from './controllers/errors.js';
 
 // Routers for different routes
 import shopRouter from './routes/shop.js';
@@ -78,6 +79,13 @@ app.use(
 app.use(CSRFProtection);
 app.use(flash());
 
+// Setting local variables for the authentication status and csrf token for the views
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.CSRFToken = req.csrfToken();
+  next();
+});
+
 // Middleware for getting the user and attaching it to the request
 // Note: For testing purposes before implementing sessions & auth
 app.use(async (req, _res, next) => {
@@ -91,18 +99,11 @@ app.use(async (req, _res, next) => {
       // Creating a user based on data stored in the session, so the
       // data that persists across requests
       req.user = user;
-      next();
     }
+    next();
   } catch (err) {
-    error(err);
+    handleError(err, next);
   }
-});
-
-// Setting local variables for the authentication status and csrf token for the views
-app.use((req, res, next) => {
-  res.locals.isAuthenticated = req.session.isLoggedIn;
-  res.locals.CSRFToken = req.csrfToken();
-  next();
 });
 
 app.use(shopRouter);
@@ -110,7 +111,22 @@ app.use(authRouter);
 app.use('/admin', adminRouter);
 
 // Middleware to handle 404 errors
+app.use('/500', get500);
+
+// Middleware to handle 404 errors
 app.use(get404);
+
+// Error handling middleware
+app.use(
+  (err: Error, req: Request, res: Response, _next: NextFunction): void => {
+    error(err);
+    res.status(500).render('errors/500', {
+      pageTitle: '500 ― Internal Server Error!',
+      path: '',
+      isAuthenticated: req.session.isLoggedIn,
+    });
+  },
+);
 
 try {
   // Connect to the MongoDB database

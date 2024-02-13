@@ -2,10 +2,10 @@ import { RequestHandler } from 'express';
 import { validationResult } from 'express-validator';
 
 import Product from '../models/product.js';
-import { error } from '../utils/logger.js';
+import { handleError } from '../utils/errorHandler.js';
 
 // Handler for rendering the product list for the '/admin/product-list'
-export const getProducts: RequestHandler = async (req, res) => {
+export const getProducts: RequestHandler = async (req, res, next) => {
   try {
     const products = await Product.find({ userId: req.user._id });
     res.render('admin/product-list', {
@@ -15,7 +15,7 @@ export const getProducts: RequestHandler = async (req, res) => {
       isAuthenticated: req.session.isLoggedIn,
     });
   } catch (err) {
-    error(err);
+    handleError(err, next);
   }
 };
 
@@ -32,7 +32,7 @@ export const getAddProduct: RequestHandler = (req, res) => {
 };
 
 // Handler for processing the submission of a new product
-export const postAddProduct: RequestHandler = async (req, res) => {
+export const postAddProduct: RequestHandler = async (req, res, next) => {
   const { title, price, description } = req.body;
 
   const validationErrors = validationResult(req);
@@ -72,8 +72,7 @@ export const postAddProduct: RequestHandler = async (req, res) => {
     // Save the product to the database
     await product.save();
   } catch (err) {
-    // If an error occurs, log it
-    error(err);
+    handleError(err, next);
   }
 
   // Redirect to the admin products page
@@ -81,12 +80,7 @@ export const postAddProduct: RequestHandler = async (req, res) => {
 };
 
 // Handler for rendering the edit product page
-export const getEditProduct: RequestHandler<
-  { productId: string },
-  unknown,
-  unknown,
-  { [key: string]: string | unknown }
-> = async (req, res) => {
+export const getEditProduct: RequestHandler = async (req, res, next) => {
   if (req.query.edit !== 'true' && req.query.edit !== 'false') {
     return res.redirect('/');
   }
@@ -110,12 +104,12 @@ export const getEditProduct: RequestHandler<
       invalidFields: [],
     });
   } catch (err) {
-    error(err);
+    handleError(err, next);
   }
 };
 
 // Handler for updating the edited product details
-export const postEditProduct: RequestHandler = async (req, res) => {
+export const postEditProduct: RequestHandler = async (req, res, next) => {
   const {
     id: productId,
     title: updatedTitle,
@@ -156,22 +150,18 @@ export const postEditProduct: RequestHandler = async (req, res) => {
       product.save();
     }
   } catch (err) {
-    error(err);
+    handleError(err, next);
   }
   res.redirect('/admin/products');
 };
 
 // Handler for deleting a product
-export const postDeleteProduct: RequestHandler<
-  unknown,
-  unknown,
-  { [key: string]: string }
-> = async (req, res) => {
+export const postDeleteProduct: RequestHandler = async (req, res, next) => {
   const { id: productId } = req.body;
   try {
     await Product.deleteOne({ _id: productId, userId: req.user._id });
   } catch (err) {
-    error(err);
+    handleError(err, next);
   }
   res.redirect('/admin/products');
 };
