@@ -7,6 +7,7 @@ import session from 'express-session'; // Library for storing sessions
 import { default as connectMongoDBSession } from 'connect-mongodb-session'; // Data store for sessions
 import csrf from 'csurf'; // Package for CSRF protection
 import flash from 'connect-flash'; // Package for flashing error messages
+import multer from 'multer'; // Package for handling mult-part form data
 
 // Custom utility functions for logging and getting IP addresses
 import { bold, italic, underline, error, log } from './utils/logger.js';
@@ -58,16 +59,45 @@ const sessionDataStore = new MongoDBStore({
 });
 const CSRFProtection = csrf();
 
+const fileStorage = multer.diskStorage({
+  destination(_req, _file, callback) {
+    callback(null, join(rootDir, 'data', 'product_images'));
+  },
+  filename(_req, file, callback) {
+    callback(null, `${new Date().toISOString()}-${file.originalname}`);
+  },
+});
+
+const fileFilter = (
+  _req: Request,
+  file: Express.Multer.File,
+  callback: multer.FileFilterCallback,
+) => {
+  if (
+    file.mimetype === 'image/png' ||
+    file.mimetype === 'image/jpg' ||
+    file.mimetype === 'image/jpeg'
+  ) {
+    callback(null, true);
+  } else {
+    callback(null, false);
+  }
+};
+
 // Configure view engine and views directory
 app.set('view engine', 'ejs');
 app.set('views', join(rootDir, 'src', 'views'));
 
 // Parse incoming request bodies with urlencoded payloads and
+// multi-part form data payloads
+app.use(express.urlencoded({ extended: true }));
+app.use(multer({ storage: fileStorage, fileFilter }).single('img'));
+
 // Serve static files from the 'public' directory
+app.use(express.static(join(rootDir, 'public')));
+
 // Initialize the session and the CSRF protection
 // Initialize connect-flash for flashing error messages using the session
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(join(rootDir, 'public')));
 app.use(
   session({
     secret: process.env.SESSION_SECRET!,
@@ -83,6 +113,7 @@ app.use(flash());
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.session.isLoggedIn;
   res.locals.CSRFToken = req.csrfToken();
+  console.log(req.session.isLoggedIn);
   next();
 });
 
@@ -118,12 +149,11 @@ app.use(get404);
 
 // Error handling middleware
 app.use(
-  (err: Error, req: Request, res: Response, _next: NextFunction): void => {
+  (err: Error, _req: Request, res: Response, _next: NextFunction): void => {
     error(err);
     res.status(500).render('errors/500', {
       pageTitle: '500 ― Internal Server Error!',
       path: '',
-      isAuthenticated: req.session.isLoggedIn,
     });
   },
 );

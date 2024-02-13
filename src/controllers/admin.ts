@@ -34,8 +34,28 @@ export const getAddProduct: RequestHandler = (req, res) => {
 // Handler for processing the submission of a new product
 export const postAddProduct: RequestHandler = async (req, res, next) => {
   const { title, price, description } = req.body;
+  const { file: image } = req;
 
   const validationErrors = validationResult(req);
+
+  console.log(image);
+
+  if (!image) {
+    return res.status(422).render('admin/edit-product', {
+      path: '/admin/edit-product',
+      pageTitle: 'Add Product',
+      editing: false,
+      errorMessages: [
+        'Attached file is not an image (only jpeg, jpg or png files allowed)',
+      ],
+      invalidFields: ['img-container'],
+      product: {
+        title,
+        price,
+        description,
+      },
+    });
+  }
 
   if (!validationErrors.isEmpty()) {
     const errorMessages = validationErrors.array().map((error) => error.msg);

@@ -71,7 +71,8 @@ error(new Error('This is an error object.'));
 
 1. First, clone the repo by running `git clone git@github.com:AmaaelTyrneaMitore/UrbanStride.git`.
 2. Install dependencies using `npm install`.
-3. Now setup environment variables for MongoDB by creating `nodemon.dev.json` (_for development_) and `nodemon.prod.json` (_for production_) at the project root and populate them with the followong content:
+3. Create a directory at root of the project `data/product_images` to store uploaded images.
+4. Now setup environment variables for MongoDB by creating `nodemon.dev.json` (_for development_) and `nodemon.prod.json` (_for production_) at the project root and populate them with the followong content:
    ```js
     {
       "env": {
@@ -86,7 +87,7 @@ error(new Error('This is an error object.'));
       }
     }
    ```
-4. Now you can set all the environment variables that you want to use during development in `nodemon.dev.json` and running the `npm run start:dev` command will spin up a development server on `http://localhost:3000/` using this config file. And running the `npm run start:prod` command will spin up the production server on the same port which will use the `nodemon.prod.json` config file, so make sure to set the `"NODE_ENV"` to `"development"` in `nodemon.dev.json` file, and set this to `"production"` in `nodemon.prod.json` file.
+5. Now you can set all the environment variables that you want to use during development in `nodemon.dev.json` and running the `npm run start:dev` command will spin up a development server on `http://localhost:3000/` using this config file. And running the `npm run start:prod` command will spin up the production server on the same port which will use the `nodemon.prod.json` config file, so make sure to set the `"NODE_ENV"` to `"development"` in `nodemon.dev.json` file, and set this to `"production"` in `nodemon.prod.json` file.
 
    **_NOTE:_** Although the above configuration is the recommended way of setting up your development environment, you don't have to follow this approach.
 

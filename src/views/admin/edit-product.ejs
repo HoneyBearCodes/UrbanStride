@@ -16,6 +16,7 @@
             action="/admin/<%= editing ? 'edit-product' : 'add-product'%>" 
             method="POST" 
             class="form-control grid grid--2-cols"
+            enctype="multipart/form-data"
             >
             <div class="inputs">
               <input 
@@ -62,7 +63,7 @@
                   </p>
                 </div>
               </label>
-              <input type="file" name="img" id="file" class="img-input" />
+              <input type="file" name="img" id="file" class="img-input" accept=".png,.jpeg,.jpg" />
             </div>
             <% if (editing) {%>
               <input type="hidden" name="id" value="<%= product._id %>" />
