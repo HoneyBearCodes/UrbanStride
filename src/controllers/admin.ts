@@ -38,8 +38,6 @@ export const postAddProduct: RequestHandler = async (req, res, next) => {
 
   const validationErrors = validationResult(req);
 
-  console.log(image);
-
   if (!image) {
     return res.status(422).render('admin/edit-product', {
       path: '/admin/edit-product',
@@ -56,6 +54,9 @@ export const postAddProduct: RequestHandler = async (req, res, next) => {
       },
     });
   }
+
+  // Constructing the path to file to store in DB
+  const imageUrl = image.path;
 
   if (!validationErrors.isEmpty()) {
     const errorMessages = validationErrors.array().map((error) => error.msg);
@@ -86,6 +87,7 @@ export const postAddProduct: RequestHandler = async (req, res, next) => {
     // Don't have to explicitly set req.user._id
     // as mongoose will automatically pick it
     userId: req.user,
+    imageUrl,
   });
 
   try {
@@ -137,6 +139,8 @@ export const postEditProduct: RequestHandler = async (req, res, next) => {
     description: updatedDescription,
   } = req.body;
 
+  const { file: image } = req;
+
   const validationErrors = validationResult(req);
 
   if (!validationErrors.isEmpty()) {
@@ -167,6 +171,9 @@ export const postEditProduct: RequestHandler = async (req, res, next) => {
       product.title = updatedTitle;
       product.price = Number(updatedPrice);
       product.description = updatedDescription;
+      if (image) {
+        product.imageUrl = image.path;
+      }
       product.save();
     }
   } catch (err) {

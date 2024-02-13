@@ -5,7 +5,7 @@ export interface ProductDocument extends Document {
   title: string;
   price: number;
   description: string;
-  image: Buffer;
+  imageUrl: string;
   userId: Types.ObjectId;
 }
 
@@ -20,9 +20,8 @@ const productSchema = new Schema<ProductDocument>({
   // Description of the product
   description: { type: String, required: true },
 
-  // Binary image data of the product
-  // TODO: use multer deal with image buffer and then set required to true
-  image: { type: Buffer },
+  // Path to the image stored in the filesystem
+  imageUrl: { type: String, required: true },
 
   // Id of user who created this product
   // userId references ("ref") to the User model

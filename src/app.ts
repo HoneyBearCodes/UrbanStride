@@ -113,7 +113,6 @@ app.use(flash());
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.session.isLoggedIn;
   res.locals.CSRFToken = req.csrfToken();
-  console.log(req.session.isLoggedIn);
   next();
 });
 
