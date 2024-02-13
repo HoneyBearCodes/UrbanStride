@@ -143,7 +143,19 @@ export const postInvoice: RequestHandler = async (req, res, next) => {
     res.setHeader('Content-Disposition', `inline; filename="${invoiceName}"`);
     invoiceDocument.pipe(res);
 
-    invoiceDocument.text('Hello World!');
+    invoiceDocument.fontSize(26).text('Invoice', {
+      underline: true,
+    });
+    invoiceDocument.fontSize(18).text('------------------------------');
+    let totalOrderPrice = 0;
+    order.products.forEach(({ product }, quantity) => {
+      totalOrderPrice += quantity * product.price;
+      invoiceDocument.text(
+        `${product.title} - ${quantity} x $${product.price}`,
+      );
+    });
+    invoiceDocument.text('------------------------------');
+    invoiceDocument.fontSize(20).text(`Total Price: $${totalOrderPrice}`);
 
     invoiceDocument.end();
   } catch (err) {
