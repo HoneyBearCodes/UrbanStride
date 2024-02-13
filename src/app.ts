@@ -61,7 +61,7 @@ const CSRFProtection = csrf();
 
 const fileStorage = multer.diskStorage({
   destination(_req, _file, callback) {
-    callback(null, join(rootDir, 'data', 'product_images'));
+    callback(null, 'data/product_images');
   },
   filename(_req, file, callback) {
     callback(null, `${new Date().toISOString()}-${file.originalname}`);
@@ -93,8 +93,9 @@ app.set('views', join(rootDir, 'src', 'views'));
 app.use(express.urlencoded({ extended: true }));
 app.use(multer({ storage: fileStorage, fileFilter }).single('img'));
 
-// Serve static files from the 'public' directory
+// Serve static files from the 'public' and 'images' directory
 app.use(express.static(join(rootDir, 'public')));
+app.use('/data', express.static(join(rootDir, 'data')));
 
 // Initialize the session and the CSRF protection
 // Initialize connect-flash for flashing error messages using the session
