@@ -1,3 +1,6 @@
+import { join } from 'path';
+import { readFile } from 'fs';
+
 import { RequestHandler } from 'express';
 
 import Product from '../models/product.js';
@@ -117,5 +120,36 @@ export const getOrders: RequestHandler = async (req, res, next) => {
     }
   } catch (err) {
     handleError(err, next);
+  }
+};
+
+// Handler for sending invoices
+export const postInvoice: RequestHandler = async (req, res, next) => {
+  const { orderId } = req.params;
+
+  // Check whether this order belongs to the current logged in user
+  try {
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return handleError(new Error('No order found!'), next);
+    }
+    if (order.user.id.toString() === req.user._id.toString()) {
+      return handleError(new Error('Unauthorized!'), next);
+    }
+
+    const invoiceName = `invoice-${orderId}.pdf`;
+    const invoicePath = join('data', 'order_invoices', invoiceName);
+
+    readFile(invoicePath, (err, data) => {
+      if (err) {
+        return handleError(err, next);
+      }
+
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `inline; filename="${invoiceName}"`);
+      res.send(data);
+    });
+  } catch (err) {
+    return handleError(err, next);
   }
 };
