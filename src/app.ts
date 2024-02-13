@@ -95,7 +95,10 @@ app.use(multer({ storage: fileStorage, fileFilter }).single('img'));
 
 // Serve static files from the 'public' and 'images' directory
 app.use(express.static(join(rootDir, 'public')));
-app.use('/data', express.static(join(rootDir, 'data')));
+app.use(
+  '/product_images',
+  express.static(join(rootDir, 'data', 'product_images')),
+);
 
 // Initialize the session and the CSRF protection
 // Initialize connect-flash for flashing error messages using the session

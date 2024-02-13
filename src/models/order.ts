@@ -14,6 +14,7 @@ export interface OrderDocument extends Document {
     name: string;
     id: Types.ObjectId;
   };
+  dateCreated: Date;
 }
 
 // Define the schema for the product collection
@@ -34,6 +35,10 @@ const ordersSchema = new Schema<OrderDocument>({
       ref: 'User',
       required: true,
     },
+  },
+  dateCreated: {
+    type: Date,
+    required: true,
   },
 });
 

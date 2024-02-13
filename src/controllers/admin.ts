@@ -56,7 +56,7 @@ export const postAddProduct: RequestHandler = async (req, res, next) => {
   }
 
   // Constructing the path to file to store in DB
-  const imageUrl = image.path;
+  const imageUrl = `/product_images/${image.filename}`;
 
   if (!validationErrors.isEmpty()) {
     const errorMessages = validationErrors.array().map((error) => error.msg);
@@ -172,7 +172,7 @@ export const postEditProduct: RequestHandler = async (req, res, next) => {
       product.price = Number(updatedPrice);
       product.description = updatedDescription;
       if (image) {
-        product.imageUrl = image.path;
+        product.imageUrl = `/product_images/${image.filename}`;
       }
       product.save();
     }

@@ -93,6 +93,7 @@ export const postOrder: RequestHandler = async (req, res, next) => {
           id: req.user,
         },
         products: cartItems,
+        dateCreated: new Date(),
       });
       order.save();
       req.user.clearCart();

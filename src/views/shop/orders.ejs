@@ -32,6 +32,11 @@
             </li>
             <% }); %>
           </ul>
+
+          <p class="product-description"><%= order.dateCreated.toDateString() %></p>
+            <form action="#" method="get">
+              <button class="submit-btn btn-hidden">Get Invoice</button>
+            </form>
         </li>
         <% }); %>
     </ul>
