@@ -1,7 +1,5 @@
-import { join } from 'path';
-import { createReadStream } from 'fs';
-
 import { RequestHandler } from 'express';
+import PDFDocument from 'pdfkit';
 
 import Product from '../models/product.js';
 import Order from '../models/order.js';
@@ -138,12 +136,16 @@ export const postInvoice: RequestHandler = async (req, res, next) => {
     }
 
     const invoiceName = `invoice-${orderId}.pdf`;
-    const invoicePath = join('data', 'order_invoices', invoiceName);
-    const file = createReadStream(invoicePath);
 
+    // Creating a new pdf document
+    const invoiceDocument = new PDFDocument();
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `inline; filename="${invoiceName}"`);
-    file.pipe(res);
+    invoiceDocument.pipe(res);
+
+    invoiceDocument.text('Hello World!');
+
+    invoiceDocument.end();
   } catch (err) {
     return handleError(err, next);
   }
