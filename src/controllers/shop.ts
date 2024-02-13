@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { readFile } from 'fs';
+import { createReadStream } from 'fs';
 
 import { RequestHandler } from 'express';
 
@@ -133,22 +133,17 @@ export const postInvoice: RequestHandler = async (req, res, next) => {
     if (!order) {
       return handleError(new Error('No order found!'), next);
     }
-    if (order.user.id.toString() === req.user._id.toString()) {
+    if (order.user.id.toString() !== req.user._id.toString()) {
       return handleError(new Error('Unauthorized!'), next);
     }
 
     const invoiceName = `invoice-${orderId}.pdf`;
     const invoicePath = join('data', 'order_invoices', invoiceName);
+    const file = createReadStream(invoicePath);
 
-    readFile(invoicePath, (err, data) => {
-      if (err) {
-        return handleError(err, next);
-      }
-
-      res.setHeader('Content-Type', 'application/pdf');
-      res.setHeader('Content-Disposition', `inline; filename="${invoiceName}"`);
-      res.send(data);
-    });
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `inline; filename="${invoiceName}"`);
+    file.pipe(res);
   } catch (err) {
     return handleError(err, next);
   }
