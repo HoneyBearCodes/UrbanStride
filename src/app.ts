@@ -1,4 +1,5 @@
-import { join } from 'path'; // Path module for file path operations
+import { join } from 'path';
+import { mkdirSync } from 'fs';
 
 import express, { NextFunction, Request, Response } from 'express'; // Express framework for handling HTTP requests
 import appRootPath from 'app-root-path'; // Library for getting the root path of the application
@@ -61,7 +62,9 @@ const CSRFProtection = csrf();
 
 const fileStorage = multer.diskStorage({
   destination(_req, _file, callback) {
-    callback(null, 'data/product_images');
+    const path = join(rootDir, 'data', 'product_images');
+    mkdirSync(path, { recursive: true });
+    callback(null, path);
   },
   filename(_req, file, callback) {
     callback(null, `${new Date().toISOString()}-${file.originalname}`);
