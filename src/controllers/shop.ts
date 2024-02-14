@@ -5,14 +5,27 @@ import Order from '../models/order.js';
 import { handleError } from '../utils/errorHandler.js';
 import createInvoice from '../utils/createInvoice.js';
 
+const ITEMS_PER_PAGE = 3;
+
 // Handler for displaying the user product list
-export const getProducts: RequestHandler = async (_req, res, next) => {
+export const getProducts: RequestHandler = async (req, res, next) => {
+  const page = +req.query.page! || 1;
+
   try {
-    const products = await Product.find();
+    const products = await Product.find()
+      .skip((page - 1) * ITEMS_PER_PAGE)
+      .limit(ITEMS_PER_PAGE);
+    const totalItems = await Product.find().countDocuments();
     res.render('shop/product-list', {
       products,
       pageTitle: 'All Products',
       path: '/',
+      currentPage: page,
+      hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+      hasPreviousPage: page > 1,
+      nextPage: page + 1,
+      previousPage: page - 1,
+      lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE),
     });
   } catch (err) {
     handleError(err, next);

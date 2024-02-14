@@ -49,11 +49,19 @@
 
     <nav class="pagination margin-bottom-md">
       <ul class="pagination-links">
-        <li><a href="#" class="pagination-link active">1</a></li>
-        <li><a href="#" class="pagination-link">2</a></li>
-        <li><a href="#" class="pagination-link">3</a></li>
-        <li><a href="#" class="pagination-link">4</a></li>
-        <li><a href="#" class="pagination-link">5</a></li>
+        <% if (currentPage !== 1 && previousPage !== 1) { %>
+        <li><a href="?page=1" class="pagination-link">1</a></li>
+        <% } %>
+        <% if (hasPreviousPage) { %>
+          <li><a href="?page=<%= previousPage %>" class="pagination-link"><%= previousPage %></a></li>
+        <% } %>
+        <li><a href="?page=<%= currentPage %>" class="pagination-link active"><%= currentPage %></a></li>
+        <% if (hasNextPage) { %>
+          <li><a href="?page=<%= nextPage %>" class="pagination-link"><%= nextPage %></a></li>
+        <% } %>
+        <% if (lastPage !== currentPage && nextPage !== lastPage) { %>
+          <li><a href="?page=<%= lastPage %>" class="pagination-link"><%= lastPage %></a></li>
+        <% } %>
       </ul>
     </nav>
     <% } else { %>
