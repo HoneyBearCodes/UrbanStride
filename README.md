@@ -12,7 +12,7 @@ Urban Stride is a dynamic sports shoe e-commerce platform developed with TypeScr
 
 - 🛍️ Curated collection of trendy sports shoes
 - 🛒 Seamless e-commerce experience with Stripe integration
-- 📦 PDF order confirmation using PDFKit
+- 📄 PDF invoice generation using PDFKit
 - ✉️ Email notifications powered by Nodemailer
 - 🔒 Secure user sessions and cookies management + CSRF Protection
 - 🌐 RESTful API for smooth interactions
@@ -53,12 +53,12 @@ error(new Error('This is an error object.'));
 - Backend: Node.js, Express.js
 - Frontend: HTML, CSS, EJS, JavaScript
 - Database: MongoDB with Mongoose ODM
-- Additional Tools: Stripe, PDFKit, SendGrid
+- Additional Tools: Stripe, PDFKit, Nodemailer, and many more!
 
 ## More Functionalities 🤩
 
 - Users can create an account using their email. They will receive a welcome email once the account is successfully created.
-- They can use the same email to reset their password. A password reset link will be provided in that email, which will be valid for only 1 hour.
+- They can use the same email to reset their password. A password reset link will be provided in that email, which will be valid for only 3 hours.
 - They can create a product that they want to sell, and it will be listed on the Products page. An authenticated user can perform edit and delete operations only on the products that belong to that user.
 - An authenticated user can also add products from the Product page to their cart. And later, they can also buy it. They'll be redirected to the payment page where they can enter their credit card details (don't enter your real credentials, use the dummy credentials that are provided [**here**](https://github.com/AmaaelTyrneaMitore/UrbanStride?tab=readme-ov-file#simulating-payments-to-test-stripe-integration-)) and as soon as the transaction completes, they are redirected to the Orders page.
 - And there they can also download the order receipt which will be generated on the fly.
@@ -71,8 +71,7 @@ error(new Error('This is an error object.'));
 
 1. First, clone the repo by running `git clone git@github.com:AmaaelTyrneaMitore/UrbanStride.git`.
 2. Install dependencies using `npm install`.
-3. Create a directory at root of the project `data/product_images` to store uploaded images.
-4. Now setup environment variables for MongoDB by creating `nodemon.dev.json` (_for development_) and `nodemon.prod.json` (_for production_) at the project root and populate them with the followong content:
+3. Now setup environment variables for MongoDB by creating `nodemon.dev.json` (_for development_) and `nodemon.prod.json` (_for production_) at the project root and populate them with the followong content:
    ```js
     {
       "env": {
@@ -87,7 +86,7 @@ error(new Error('This is an error object.'));
       }
     }
    ```
-5. Now you can set all the environment variables that you want to use during development in `nodemon.dev.json` and running the `npm run start:dev` command will spin up a development server on `http://localhost:3000/` using this config file. And running the `npm run start:prod` command will spin up the production server on the same port which will use the `nodemon.prod.json` config file, so make sure to set the `"NODE_ENV"` to `"development"` in `nodemon.dev.json` file, and set this to `"production"` in `nodemon.prod.json` file.
+4. Now you can set all the environment variables that you want to use during development in `nodemon.dev.json` and running the `npm run start:dev` command will spin up a development server on `http://localhost:3000/` using this config file. And running the `npm run start:prod` command will spin up the production server on the same port which will use the `nodemon.prod.json` config file, so make sure to set the `"NODE_ENV"` to `"development"` in `nodemon.dev.json` file, and set this to `"production"` in `nodemon.prod.json` file.
 
    **_NOTE:_** Although the above configuration is the recommended way of setting up your development environment, you don't have to follow this approach.
 
@@ -98,7 +97,7 @@ You can read all about it in [**Stripe's official documentation**](https://strip
 ## Usage 💡
 
 - Visit the website, browse the catalog, and add products to your cart.
-- Proceed to checkout, complete the payment using Stripe, and receive a PDF confirmation via email.
+- Proceed to checkout, complete the payment using Stripe, and download a PDF invoice!
 
 ## Contributing 🤝
 
@@ -111,7 +110,7 @@ This project is licensed under the [GPL-3.0 License](LICENSE).
 ## Acknowledgements 🙏
 
 - Special thanks to the amazing communities of Node.js, Express.js, and MongoDB.
-- Hat tip to the creators of Stripe, PDFKit, and SendGrid for their invaluable tools.
+- Hat tip to the creators of Stripe, PDFKit, and Nodemailer for their invaluable tools.
 
 ---
 
