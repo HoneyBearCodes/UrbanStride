@@ -1,9 +1,9 @@
 import { RequestHandler } from 'express';
-import PDFDocument from 'pdfkit';
 
 import Product from '../models/product.js';
 import Order from '../models/order.js';
 import { handleError } from '../utils/errorHandler.js';
+import createInvoice from '../utils/createInvoice.js';
 
 // Handler for displaying the user product list
 export const getProducts: RequestHandler = async (_req, res, next) => {
@@ -135,29 +135,7 @@ export const postInvoice: RequestHandler = async (req, res, next) => {
       return handleError(new Error('Unauthorized!'), next);
     }
 
-    const invoiceName = `invoice-${orderId}.pdf`;
-
-    // Creating a new pdf document
-    const invoiceDocument = new PDFDocument();
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `inline; filename="${invoiceName}"`);
-    invoiceDocument.pipe(res);
-
-    invoiceDocument.fontSize(26).text('Invoice', {
-      underline: true,
-    });
-    invoiceDocument.fontSize(18).text('------------------------------');
-    let totalOrderPrice = 0;
-    order.products.forEach(({ product }, quantity) => {
-      totalOrderPrice += quantity * product.price;
-      invoiceDocument.text(
-        `${product.title} - ${quantity} x $${product.price}`,
-      );
-    });
-    invoiceDocument.text('------------------------------');
-    invoiceDocument.fontSize(20).text(`Total Price: $${totalOrderPrice}`);
-
-    invoiceDocument.end();
+    createInvoice(order, res);
   } catch (err) {
     return handleError(err, next);
   }
