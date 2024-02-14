@@ -55,8 +55,8 @@ const formatDate = (date: Date): string =>
  */
 const getSubtotal = (order: OrderDocument): string => {
   let totalOrderPrice = 0;
-  order.products.forEach(({ product }, quantity) => {
-    totalOrderPrice += product.price * quantity;
+  order.products.forEach((orderItem) => {
+    totalOrderPrice += orderItem.product.price * orderItem.quantity;
   });
   return totalOrderPrice.toFixed(2);
 };

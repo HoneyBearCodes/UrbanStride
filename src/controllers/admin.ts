@@ -1,8 +1,14 @@
+import { join } from 'path';
+
 import { RequestHandler } from 'express';
 import { validationResult } from 'express-validator';
+import appRootPath from 'app-root-path';
 
 import Product from '../models/product.js';
 import { handleError } from '../utils/errorHandler.js';
+import { normalizeDBFilePath, removeFile } from '../utils/fileUtils.js';
+
+const rootDir = appRootPath.toString();
 
 // Handler for rendering the product list for the '/admin/product-list'
 export const getProducts: RequestHandler = async (req, res, next) => {
@@ -172,6 +178,9 @@ export const postEditProduct: RequestHandler = async (req, res, next) => {
       product.price = Number(updatedPrice);
       product.description = updatedDescription;
       if (image) {
+        removeFile(
+          `${join(rootDir, 'data', ...normalizeDBFilePath(product.imageUrl))}`,
+        );
         product.imageUrl = `/product_images/${image.filename}`;
       }
       product.save();
@@ -186,7 +195,19 @@ export const postEditProduct: RequestHandler = async (req, res, next) => {
 export const postDeleteProduct: RequestHandler = async (req, res, next) => {
   const { id: productId } = req.body;
   try {
-    await Product.deleteOne({ _id: productId, userId: req.user._id });
+    const product = await Product.findOne({
+      _id: productId,
+      userId: req.user._id,
+    });
+    if (product) {
+      removeFile(
+        `${join(rootDir, 'data', ...normalizeDBFilePath(product.imageUrl))}`,
+      );
+      await Product.deleteOne({
+        _id: productId,
+        userId: req.user._id,
+      });
+    }
   } catch (err) {
     handleError(err, next);
   }
