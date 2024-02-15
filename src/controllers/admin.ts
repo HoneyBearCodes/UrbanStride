@@ -192,8 +192,9 @@ export const postEditProduct: RequestHandler = async (req, res, next) => {
 };
 
 // Handler for deleting a product
-export const postDeleteProduct: RequestHandler = async (req, res, next) => {
-  const { id: productId } = req.body;
+export const deleteProduct: RequestHandler = async (req, res) => {
+  const { productId } = req.params;
+
   try {
     const product = await Product.findOne({
       _id: productId,
@@ -207,9 +208,9 @@ export const postDeleteProduct: RequestHandler = async (req, res, next) => {
         _id: productId,
         userId: req.user._id,
       });
+      return res.status(200).json({ message: 'Operation succeeded' });
     }
   } catch (err) {
-    handleError(err, next);
+    return res.status(500).json({ message: 'Operation failed.' });
   }
-  res.redirect('/admin/products');
 };

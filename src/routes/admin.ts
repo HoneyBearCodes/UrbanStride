@@ -6,7 +6,7 @@ import {
   getEditProduct,
   getProducts,
   postAddProduct,
-  postDeleteProduct,
+  deleteProduct,
   postEditProduct,
 } from '../controllers/admin.js';
 import isAuthenticated from '../middlewares/is-auth.js';
@@ -57,6 +57,6 @@ adminRouter.post(
   postEditProduct,
 );
 
-adminRouter.post('/delete-product', isAuthenticated, postDeleteProduct);
+adminRouter.delete('/product/:productId', isAuthenticated, deleteProduct);
 
 export default adminRouter;

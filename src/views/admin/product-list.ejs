@@ -1,4 +1,5 @@
 <%- include('../includes/head.ejs') %>
+  <script src="/js/admin.js" defer></script>
   <link rel="stylesheet" href="/css/error.css" />
   <link rel="stylesheet" href="/css/queries.css" />
   </head>
@@ -16,7 +17,7 @@
                 <!-- PRODUCT CARD -->
                 <article class="product card">
                   <form action="/admin/delete-product" method="post">
-                    <button class="add-to-cart" type="submit">
+                    <button class="add-to-cart" type="button" onclick="deleteProduct(this)">
                       <i class="fa-solid fa-trash"></i>
                     </button>
                     <input type="hidden" name="id" value="<%= product._id %>">
