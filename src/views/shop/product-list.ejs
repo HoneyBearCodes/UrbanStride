@@ -18,7 +18,7 @@
           <% if (isAuthenticated) { %>
             <form action="/cart" method="post">
               <button class="add-to-cart" type="submit">
-                <i class="fa-solid fa-cart-plus"></i>
+                <span class="material-symbols-outlined">add_shopping_cart</span>
               </button>
               <input type="hidden" name="productId" value="<%= product._id%>">
               <input type="hidden" name="_csrf" value="<%= CSRFToken %>">
@@ -39,7 +39,7 @@
         <footer class="product-actions">
           <form action="/products/<%= product._id %>" method="get">
             <button class="details" type="submit">
-              View Details <i class="fa-solid fa-arrow-right-long"></i>
+              View Details <span class="material-symbols-outlined">east</span>
             </button>
           </form>
         </footer>
@@ -66,7 +66,7 @@
     </nav>
     <% } else { %>
       <div class="error-card card card--linear margin-bottom-sm">
-        <h1 class="error-code">Boo<i class="fa-solid fa-ghost"></i>!</h1>
+        <h1 class="error-code">Booo!!</h1>
         <p class="error-title">No Products Found!</p>
         <p class="error-subtitle margin-bottom-sm">
           But you can create new ones!

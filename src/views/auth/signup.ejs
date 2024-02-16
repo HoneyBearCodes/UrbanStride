@@ -18,7 +18,7 @@
                 <input class="<%= invalidFields.includes('email') ? 'err' : '' %>" type="email" name="email" placeholder="Your email" value="<%= oldInput.email %>" onInput="this.classList.remove('err')" />
                 <input class="<%= invalidFields.includes('pass') ? 'err' : '' %>" type="password" name="pass" placeholder="Your password" minlength="8" maxlength="12" value="<%= oldInput.pass %>" onInput="this.classList.remove('err')" />
                 <input class="<%= invalidFields.includes('confirmPass') ? 'err' : '' %>" type="password" name="confirmPass" placeholder="Confirm password" minlength="8" maxlength="12" value="<%= oldInput.confirmPass %>" onInput="this.classList.remove('err')" />
-                <button class="submit-btn" type="submit">Create Account <i class="fa-solid fa-arrow-right-long"></i></button>
+                <button class="submit-btn" type="submit"><span class="material-symbols-outlined">person_add</span>Create Account</button>
               </div>
               <input type="hidden" name="_csrf" value="<%= CSRFToken %>">
             </form>

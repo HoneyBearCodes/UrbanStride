@@ -18,7 +18,7 @@
                 <article class="product card">
                   <form action="/admin/delete-product" method="post">
                     <button class="add-to-cart" type="button" onclick="deleteProduct(this)">
-                      <i class="fa-solid fa-trash"></i>
+                      <span class="material-symbols-outlined">delete</span>
                     </button>
                     <input type="hidden" name="id" value="<%= product._id %>">
                     <input type="hidden" name="_csrf" value="<%= CSRFToken %>">
@@ -37,7 +37,7 @@
                   <footer class="product-actions">
                     <form action="/admin/edit-product/<%= product._id %>?edit=true" method="post">
                       <button class="details" type="submit">
-                        Edit Product <i class="fa-solid fa-arrow-right-long"></i>
+                        Edit Product <span class="material-symbols-outlined">east</span>
                       </button>
                       <input type="hidden" name="_csrf" value="<%= CSRFToken %>">
                     </form>
@@ -57,7 +57,7 @@
             </nav>
             <% } else { %>
               <div class="error-card card card--linear margin-bottom-sm">
-                <h1 class="error-code">Boo<i class="fa-solid fa-ghost"></i>!</h1>
+                <h1 class="error-code">Booo!!</h1>
                 <p class="error-title">No Products Found!</p>
                 <p class="error-subtitle margin-bottom-sm">
                   But you can create new ones!

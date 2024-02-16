@@ -16,7 +16,7 @@
             <form action="/reset" method="POST" class="form-control container card">
               <div class="inputs">
                 <input type="email" name="email" placeholder="Your email" />
-                <button class="submit-btn" type="submit"><i class="fa-solid fa-paper-plane"></i> Send Reset Link</button>
+                <button class="submit-btn" type="submit"><span class="material-symbols-outlined">send</span> Send Reset Link</button>
               </div>
               <input type="hidden" name="_csrf" value="<%= CSRFToken %>">
             </form>

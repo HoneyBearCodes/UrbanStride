@@ -7,20 +7,19 @@
     <ul class="main-nav-links">
       <li>
         <a class="main-nav-link <%= path === '/' ? 'active' : '' %>" href="/"
-          ><i class="fa-solid fa-shop"></i> Shop</a
-        >
+          ><span class="material-symbols-outlined">storefront</span> Shop</a>
       </li>
 
       <% if (isAuthenticated) { %>
         <li>
           <a class="main-nav-link <%= path === '/cart' ? 'active' : '' %>" href="/cart"
-            ><i class="fa-solid fa-cart-shopping"></i> Cart</a
+            ><span class="material-symbols-outlined">shopping_cart</span> Cart</a
           >
         </li>
         
         <li>
           <a class="main-nav-link <%= path === '/orders' ? 'active' : '' %>" href="/orders"
-            ><i class="fa-solid fa-truck-fast"></i> Orders</a
+            ><span class="material-symbols-outlined">orders</span> Orders</a
           >
         </li>
       <% } %>
@@ -36,32 +35,32 @@
       <% if (isAuthenticated) { %>
         <form action="/admin/add-product" method="get">
         <button class="main-nav-action add">
-          <i class="fa-solid fa-circle-plus"></i> Add
+          <span class="material-symbols-outlined">add_circle</span> Add
         </button>
       </form>
 
       <form action="/admin/products" method="get">
         <button class="main-nav-action <%= path === '/admin/products' ? 'active' : '' %>">
-          <i class="fa-solid fa-key"></i> Admin
+          <span class="material-symbols-outlined">account_circle</span> Admin
         </button>
       </form>
 
       <form action="/logout" method="post">
         <button class="main-nav-action <%= path === '/login' ? 'active' : '' %>">
-          <i class="fa-solid fa-right-from-bracket"></i> Logout
+          <span class="material-symbols-outlined">logout</span> Logout
           <input type="hidden" name="_csrf" value="<%= CSRFToken %>">
         </button>
       </form>
       <% } else { %>
         <form action="/login" method="get">
           <button class="main-nav-action <%= path === '/login' ? 'active' : '' %>">
-            <i class="fa-solid fa-right-to-bracket"></i> Login
+            <span class="material-symbols-outlined">login</span> Login
           </button>
         </form>
 
         <form action="/signup" method="get">
           <button class="main-nav-action <%= path === '/signup' ? 'active' : '' %>">
-            <i class="fa-solid fa-user-plus"></i> Signup
+            <span class="material-symbols-outlined">person_add</span> Signup
           </button>
         </form>
       <% } %>
@@ -70,12 +69,12 @@
     <!-- RESP NAV -->
     <div class="resp-nav">
       <button class="resp-nav-btn-links">
-        <i class="fa-solid fa-bars"></i>
-        <i class="fa-solid fa-xmark"></i>
+        <span class="material-symbols-outlined">menu</span>
+        <span class="material-symbols-outlined">close</span>
       </button>
 
       <button class="resp-nav-btn-actions">
-        <i class="fa-solid fa-user"></i>
+        <span class="material-symbols-outlined">account_circle</span>
       </button>
     </div>
   </nav>
