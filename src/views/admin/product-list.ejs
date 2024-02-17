@@ -17,7 +17,7 @@
                 <!-- PRODUCT CARD -->
                 <article class="product card">
                   <form action="/admin/delete-product" method="post">
-                    <button class="add-to-cart" type="button" onclick="deleteProduct(this)">
+                    <button id="deleteButton" class="add-to-cart" type="button">
                       <span class="material-symbols-outlined">delete</span>
                     </button>
                     <input type="hidden" name="id" value="<%= product._id %>">

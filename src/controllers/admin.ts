@@ -194,16 +194,34 @@ export const postEditProduct: RequestHandler = async (req, res, next) => {
   try {
     const product = await Product.findById(productId);
     if (product && product.userId.toString() === req.user._id.toString()) {
+      const imageUrl = image
+        ? `/product_images/${image.filename}`
+        : product.imageUrl;
+
+      // Update the product details in MongoDB
       product.title = updatedTitle;
       product.price = Number(updatedPrice);
       product.description = updatedDescription;
-      if (image) {
-        removeFile(
-          `${join(rootDir, 'data', ...normalizeDBFilePath(product.imageUrl))}`,
-        );
-        product.imageUrl = `/product_images/${image.filename}`;
+      product.imageUrl = imageUrl;
+      await product.save();
+
+      // Set existing prices in Stripe to inactive
+      const prices = await stripeClient.prices.list({
+        product: productId,
+      });
+
+      for (const price of prices.data) {
+        await stripeClient.prices.update(price.id, {
+          active: false,
+        });
       }
-      product.save();
+
+      // Create a new price in Stripe
+      await stripeClient.prices.create({
+        product: productId,
+        unit_amount: updatedPrice * 100,
+        currency: 'usd',
+      });
     }
   } catch (err) {
     handleError(err, next);
@@ -220,17 +238,38 @@ export const deleteProduct: RequestHandler = async (req, res) => {
       _id: productId,
       userId: req.user._id,
     });
+
     if (product) {
+      // Set the product and its prices in Stripe to inactive
+      await stripeClient.products.update(productId, {
+        active: false,
+      });
+
+      const prices = await stripeClient.prices.list({
+        product: productId,
+      });
+
+      for (const price of prices.data) {
+        await stripeClient.prices.update(price.id, {
+          active: false,
+        });
+      }
+
+      // Remove the file from the filesystem
       removeFile(
         `${join(rootDir, 'data', ...normalizeDBFilePath(product.imageUrl))}`,
       );
+
+      // Delete the product in MongoDB
       await Product.deleteOne({
         _id: productId,
         userId: req.user._id,
       });
+
       return res.status(200).json({ message: 'Operation succeeded' });
     }
   } catch (err) {
+    console.error(err);
     return res.status(500).json({ message: 'Operation failed.' });
   }
 };
