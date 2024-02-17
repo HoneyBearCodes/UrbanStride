@@ -3,3 +3,4 @@ dist
 nodemon.*.json
 data/product_images/*
 data/order_invoices/*
+logs/*
