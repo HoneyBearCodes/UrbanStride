@@ -4,6 +4,8 @@ Step up your shoe game with Urban Stride - Where Style Meets Motion!
 
 ![Urban Stride Logo](public/img/logo.png)
 
+### [Click Here To Visit The Application &LongRightArrow;](https://urbanstride.onrender.com/)
+
 ## About
 
 Urban Stride is a dynamic sports shoe e-commerce platform developed with TypeScript, Node.js, EJS, and MongoDB. This project serves as a practice ground for honing skills in modern web development.
@@ -88,7 +90,7 @@ error(new Error('This is an error object.'));
    ```
 4. Now you can set all the environment variables that you want to use during development in `nodemon.dev.json` and running the `npm run start:dev` command will spin up a development server on `http://localhost:3000/` using this config file. And running the `npm run start:prod` command will spin up the production server on the same port which will use the `nodemon.prod.json` config file, so make sure to set the `"NODE_ENV"` to `"development"` in `nodemon.dev.json` file, and set this to `"production"` in `nodemon.prod.json` file.
 
-   **_NOTE:_** Although the above configuration is the recommended way of setting up your development environment, you don't have to follow this approach.
+   **_NOTE:_** In the mentioned approach, it is suggested to use npm run start:prod to utilize environment variables from the nodemon.prod.json file. However, it is important to note that this recommendation is specifically for testing purposes on your local machine. This allows you to assess the production flow before actual deployment. During deployment, it's worth mentioning that many hosting providers furnish a front-end interface for configuring these environment variables. Therefore, the aforementioned approach is primarily designed for local testing purposes.
 
 ## Simulating Payments To Test Stripe Integration 💷
 
