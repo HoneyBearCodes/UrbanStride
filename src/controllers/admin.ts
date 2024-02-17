@@ -3,12 +3,15 @@ import { join } from 'path';
 import { RequestHandler } from 'express';
 import { validationResult } from 'express-validator';
 import appRootPath from 'app-root-path';
+import stripe from 'stripe';
 
 import Product from '../models/product.js';
 import { handleError } from '../utils/errorHandler.js';
 import { normalizeDBFilePath, removeFile } from '../utils/fileUtils.js';
 
 const rootDir = appRootPath.toString();
+const stripeSecretKey = process.env.STRIPE_KEY!;
+const stripeClient = new stripe(stripeSecretKey);
 
 // Handler for rendering the product list for the '/admin/product-list'
 export const getProducts: RequestHandler = async (req, res, next) => {
@@ -99,6 +102,23 @@ export const postAddProduct: RequestHandler = async (req, res, next) => {
   try {
     // Save the product to the database
     await product.save();
+
+    // Create a product for stripe
+    await stripeClient.products.create({
+      id: product._id.toString(),
+      name: title,
+      description,
+      images: [
+        'https://urbanstride.onrender.com/product_images/2024-02-17T12:10:06.530Z-product-3.jpg',
+      ],
+    });
+
+    // Create a price for the product in Stripe
+    await stripeClient.prices.create({
+      product: product._id.toString(),
+      unit_amount: price * 100,
+      currency: 'usd',
+    });
   } catch (err) {
     handleError(err, next);
   }
