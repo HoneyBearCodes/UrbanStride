@@ -9,7 +9,6 @@ import { default as connectMongoDBSession } from 'connect-mongodb-session'; // D
 import csrf from 'csurf'; // Package for CSRF protection
 import flash from 'connect-flash'; // Package for flashing error messages
 import multer from 'multer'; // Package for handling mult-part form data
-import helmet from 'helmet'; // Package to work in secure response headers
 import compression from 'compression'; // Package to compress & optimize assets
 
 // Custom utility functions for logging and getting IP addresses
@@ -90,9 +89,7 @@ const fileFilter = (
   }
 };
 
-// Use helmet to configure secure response headers and
 // Use compression to compress and optimize assets
-app.use(helmet());
 app.use(compression());
 
 // Configure view engine and views directory
