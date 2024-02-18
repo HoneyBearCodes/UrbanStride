@@ -1,11 +1,55 @@
 {
+  "lang": "en",
+  "dir": "ltr",
   "short_name": "Urban Stride",
-  "name": "Urban Stride ― style meets motion",
+  "name": "Urban Stride ― Style Meets Motion",
+  "description": "Step up your shoe game with Urban Stride - Where style meets motion!",
+  "start_url": "/",
+  "scope": "/",
   "icons": [
     { "src": "img/fav-192.png", "type": "image/png", "sizes": "192x192" },
-    { "src": "img/fav-512.png", "type": "image/png", "sizes": "512x512" }
+    { "src": "img/fav-512.png", "type": "image/png", "sizes": "512x512" },
+    {
+      "src": "img/fav-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    }
   ],
   "background_color": "#858ae3",
   "theme_color": "#858ae3",
-  "display": "standalone"
+  "display": "standalone",
+  "orientation": "portrait",
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "Add New Product",
+      "description": "Add a new product to sell.",
+      "url": "/admin/add-product"
+    },
+    {
+      "name": "Your Product Catalog",
+      "description": "Explore the products created by you.",
+      "url": "/admin/products"
+    },
+    {
+      "name": "View Cart",
+      "description": "View your cart items.",
+      "url": "/cart"
+    }
+  ],
+  "navigation_preload": false,
+  "categories": ["shopping", "fashion", "lifestyle", "finance", "sports"],
+  "screenshots": [
+    {
+      "src": "img/scr_1.png",
+      "sizes": "622x1283",
+      "type": "image/png"
+    },
+    {
+      "src": "img/scr_2.png",
+      "sizes": "622x1283",
+      "type": "image/png"
+    }
+  ]
 }
