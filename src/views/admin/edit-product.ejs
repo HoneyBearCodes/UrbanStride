@@ -57,7 +57,7 @@
             <div class="image-selection">
               <label for="file">
                 <div class="img-container card">
-                  <p class="img-icon"><span class="material-symbols-outlined">image</span></p>
+                  <p class="img-icon"><span class="material-symbols-outlined img-icon">image</span></p>
                   <p>
                     <%= editing ? 'Click here to update your image' : 'Click here to add your image' %>
                   </p>
@@ -70,5 +70,5 @@
               <% } %>
               <input type="hidden" name="_csrf" value="<%= CSRFToken %>">
           </form>
-        </div>
+
         <%- include('../includes/end.ejs') %>
