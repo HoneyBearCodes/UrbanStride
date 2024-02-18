@@ -2,6 +2,7 @@ import { Router } from 'express';
 
 import {
   getCart,
+  getCheckout,
   getOrders,
   getProduct,
   getProducts,
@@ -24,6 +25,8 @@ shopRouter
   .post(isAuthenticated, postCart);
 
 shopRouter.post('/cart-delete-item', isAuthenticated, postCartDeleteItem);
+
+shopRouter.get('/checkout', isAuthenticated, getCheckout);
 
 shopRouter.post('/create-order', isAuthenticated, postOrder);
 

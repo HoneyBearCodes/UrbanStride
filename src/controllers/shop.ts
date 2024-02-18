@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
 
-import Product from '../models/product.js';
+import Product, { ProductDocument } from '../models/product.js';
 import Order from '../models/order.js';
 import { handleError } from '../utils/errorHandler.js';
 import createInvoice from '../utils/createInvoice.js';
@@ -127,6 +127,33 @@ export const getOrders: RequestHandler = async (req, res, next) => {
         path: '/orders',
         pageTitle: 'Your Orders',
         orders,
+      });
+    }
+  } catch (err) {
+    handleError(err, next);
+  }
+};
+
+// Handler for serving the checkout the page
+export const getCheckout: RequestHandler = async (req, res, next) => {
+  try {
+    const user = await req.user.populate('cart.items.productId');
+
+    if (user) {
+      const cartItems = user.cart.items as unknown;
+      let cartTotal = 0;
+
+      (cartItems as { quantity: number; productId: ProductDocument }[]).forEach(
+        (item) => {
+          cartTotal = item.quantity * item.productId.price;
+        },
+      );
+
+      res.render('shop/checkout', {
+        path: '/checkout',
+        pageTitle: 'Checkout',
+        cartTotal,
+        products: cartItems,
       });
     }
   } catch (err) {

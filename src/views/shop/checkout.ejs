@@ -1,0 +1,43 @@
+<%- include('../includes/head.ejs')  %>
+<link rel="stylesheet" href="/css/error.css" />
+<link rel="stylesheet" href="/css/queries.css" />
+</head>
+
+<body>
+<%- include('../includes/navigation.ejs') %>
+
+<!-- MAIN CONTENT -->
+<main>
+  <div class="container cart-products-list margin-bottom-md">
+    <!-- CARD GRID -->
+    <% if (products.length > 0) {%>
+    <ul>
+      <% for(let product of products) { %>
+      <li class="cart-products-container card margin-bottom-md">
+        <div class="cart-product-details">
+          <p class="product-title"><%= product.productId.title %></p>
+          <p class="product-price"><span>Quantity: <%= product.quantity %></span></p>
+        </div>
+      </li>
+      <% } %>
+    </ul>
+  </div>
+
+  <div class="checkout margin-bottom-sm">
+    <p class="product-price"><span>Total: $</span><%= cartTotal %></p>
+    <form action="/checkout" method="post">
+      <button class="submit-btn" type="submit">Checkout</button>
+      <input type="hidden" name="_csrf" value="<%= CSRFToken %>">
+    </form>
+
+  <% } else {%>
+    <div class="error-card card card--linear margin-bottom-sm">
+      <h1 class="error-code">Awww!</h1>
+      <p class="error-title">Your cart is lonely!</p>
+      <p class="error-subtitle margin-bottom-sm">
+        Quick! Add some items to make it feel happy!
+      </p>
+      <p class="error-message">[🥹 Your cart is empty 🛒]</p>
+      <% } %>
+  
+<%- include('../includes/end.ejs') %>
