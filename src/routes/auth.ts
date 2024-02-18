@@ -15,6 +15,21 @@ import {
 import User from '../models/user.js';
 
 const authRouter = Router();
+const validEmailProviders = [
+  'gmail.com',
+  'outlook.com',
+  'yahoo.com',
+  'hotmail.com',
+  'outlook.in',
+  'icloud.com',
+  'aol.com',
+  'protonmail.com',
+  'protonmail.me',
+  'zoho.com',
+  'yandex.com',
+  'gmx.com',
+  'mail.com',
+];
 
 authRouter
   .route('/login')
@@ -32,6 +47,13 @@ authRouter
         .isEmail()
         .withMessage('Please enter a valid email like <user@domain.com>')
         .custom(async (value) => {
+          const emailDomain = value.split('@')[1];
+          if (!validEmailProviders.includes(emailDomain)) {
+            throw new Error(
+              'Please use a valid email provider like gmail, outlook, etc.',
+            );
+          }
+
           const user = await User.findOne({ email: value });
           if (user) {
             // User already exists
