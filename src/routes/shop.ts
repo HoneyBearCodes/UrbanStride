@@ -8,8 +8,9 @@ import {
   getProducts,
   postCart,
   postCartDeleteItem,
+  createCheckout,
   postInvoice,
-  postOrder,
+  createOrder,
 } from '../controllers/shop.js';
 import isAuthenticated from '../middlewares/is-auth.js';
 
@@ -28,7 +29,9 @@ shopRouter.post('/cart-delete-item', isAuthenticated, postCartDeleteItem);
 
 shopRouter.get('/checkout', isAuthenticated, getCheckout);
 
-shopRouter.post('/create-order', isAuthenticated, postOrder);
+shopRouter.get('/create-checkout', isAuthenticated, createCheckout);
+
+shopRouter.get('/checkout/success', isAuthenticated, createOrder);
 
 shopRouter.get('/orders', isAuthenticated, getOrders);
 

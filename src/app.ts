@@ -46,6 +46,7 @@ declare module 'express-session' {
   interface Session {
     user: UserDocument;
     isLoggedIn: boolean;
+    stripeCheckoutSessionId?: string;
   }
 }
 

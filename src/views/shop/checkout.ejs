@@ -25,10 +25,9 @@
 
   <div class="checkout margin-bottom-sm">
     <p class="product-price"><span>Total: $</span><%= cartTotal %></p>
-    <form action="/checkout" method="post">
-      <button class="submit-btn" type="submit">Checkout</button>
-      <input type="hidden" name="_csrf" value="<%= CSRFToken %>">
-    </form>
+    <div>
+      <a href="/create-checkout" class="submit-btn">Checkout</a>
+    </div>
 
   <% } else {%>
     <div class="error-card card card--linear margin-bottom-sm">
