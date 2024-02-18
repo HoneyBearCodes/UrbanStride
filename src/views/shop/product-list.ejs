@@ -18,8 +18,12 @@
         <p class="popup-text">
           Urban Stride is a practice project hosted on Render. To save costs, the app may reset after inactivity, affecting added products or orders. User sessions and accounts are the only things that persist.
         </p>
+        <p class="popup-text">
+          Also, checkout amount must be less than $10,000.00.
+        </p>
         <button class="acknowledgePopup">Got It</button>
         <input type="hidden" name="_csrf" value="<%= CSRFToken %>">
+        <p class="popup-subtitle"><strong>&copy; Shashank Singh <%= new Date().getFullYear(); %></strong></p>
       </div>
     </div>
   <% }%>
@@ -83,7 +87,7 @@
     </nav>
     <% } else { %>
       <div class="error-card card card--linear margin-bottom-sm">
-        <h1 class="error-code">Booo!!</h1>
+        <h1 class="error-code">MT!</h1>
         <p class="error-title">No Products Found!</p>
         <p class="error-subtitle margin-bottom-sm">
           But you can create new ones!
