@@ -1,17 +1,24 @@
-import { unlink } from 'fs';
+import { unlink, existsSync } from 'fs';
+
+import { warn } from './logger.js';
 
 /**
- * Remove a file from the file system.
+ * Remove a file from the file system if it exists.
  *
  * @param {string} filePath - The path of the file to be removed.
  * @throws {Error} Throws an error if the file removal fails.
  */
 export const removeFile = (filePath: string): void => {
-  unlink(filePath, (err) => {
-    if (err) {
-      throw err;
-    }
-  });
+  // Check if the file exists before attempting to remove it
+  if (existsSync(filePath)) {
+    unlink(filePath, (err) => {
+      if (err) {
+        throw err;
+      }
+    });
+  } else {
+    warn(`File does not exist at path: ${filePath}`);
+  }
 };
 
 /**
