@@ -15,11 +15,14 @@ export const getProducts: RequestHandler = async (req, res, next) => {
   const page = +req.query.page! || 1;
 
   try {
+    const showPopup = req.session.popupAcknowledged !== false;
+
     const products = await Product.find()
       .skip((page - 1) * ITEMS_PER_PAGE)
       .limit(ITEMS_PER_PAGE);
     const totalItems = await Product.find().countDocuments();
     res.render('shop/product-list', {
+      showPopup,
       products,
       pageTitle: 'All Products',
       path: '/',
@@ -247,4 +250,10 @@ export const postInvoice: RequestHandler = async (req, res, next) => {
   } catch (err) {
     return handleError(err, next);
   }
+};
+
+// Contnroller for submission of popup acknowledgement
+export const acknowledgePopup: RequestHandler = (req, res) => {
+  req.session.popupAcknowledged = false;
+  res.sendStatus(200);
 };

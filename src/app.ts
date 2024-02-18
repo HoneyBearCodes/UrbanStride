@@ -48,6 +48,7 @@ declare module 'express-session' {
     user: UserDocument;
     isLoggedIn: boolean;
     stripeCheckoutSessionId?: string;
+    popupAcknowledged: boolean;
   }
 }
 

@@ -11,8 +11,10 @@ import {
   createCheckout,
   postInvoice,
   createOrder,
+  acknowledgePopup,
 } from '../controllers/shop.js';
 import isAuthenticated from '../middlewares/is-auth.js';
+import checkPopupAcknowledgement from '../middlewares/checkPopup.js';
 
 const shopRouter = Router();
 
@@ -36,5 +38,11 @@ shopRouter.get('/checkout/success', isAuthenticated, createOrder);
 shopRouter.get('/orders', isAuthenticated, getOrders);
 
 shopRouter.post('/orders/:orderId', isAuthenticated, postInvoice);
+
+shopRouter.post(
+  '/acknowledge-popup',
+  checkPopupAcknowledgement,
+  acknowledgePopup,
+);
 
 export default shopRouter;

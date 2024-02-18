@@ -1,6 +1,7 @@
 <%- include('../includes/head.ejs')  %>
 <link rel="stylesheet" href="/css/error.css" />
 <link rel="stylesheet" href="/css/queries.css" />
+<script defer src="/js/popup.js"></script>
 </head>
 
 <body>
@@ -8,6 +9,22 @@
 
 <!-- MAIN CONTENT -->
 <main>
+  <!-- ACKNOWLEDGEMENT POPUP -->
+  <% if (showPopup) { %>
+    <div class="popup-container">
+      <div class="popup">
+        <h2 class="popup-title">Important Notice</h2>
+        <p class="popup-subtitle"><strong>Please read this carefully</strong></p>
+        <p class="popup-text">
+          Urban Stride is a practice project hosted on Render. To save costs, the app may reset after inactivity, affecting added products or orders. User sessions and accounts are the only things that persist.
+        </p>
+        <button class="acknowledgePopup">Got It</button>
+        <input type="hidden" name="_csrf" value="<%= CSRFToken %>">
+      </div>
+    </div>
+  <% }%>
+
+
   <div class="container main">
     <% if (products.length > 0 ) { %>
     <!-- PRODUCTS GRID -->
