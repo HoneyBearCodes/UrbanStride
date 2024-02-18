@@ -84,7 +84,8 @@ error(new Error('This is an error object.'));
         "GMAIL_USER": "", // gmail email id
         "GMAIL_PASS": "", // gmail app password (not login password)
         "STRIPE_KEY": "", // stripe auth key
-        "NODE_ENV": "" // 'development' or 'production'
+        "NODE_ENV": "", // 'development' or 'production'
+        "DOMAIN": "", // 'http://localhost:3000' or your production domain
       }
     }
    ```

@@ -163,8 +163,8 @@ export const createCheckout: RequestHandler = async (req, res, next) => {
         {
           line_items: lineItems,
           mode: 'payment',
-          success_url: 'http://localhost:3000/checkout/success',
-          cancel_url: 'https://urbanstride.onrender.com/cart',
+          success_url: `${process.env.DOMAIN}/checkout/success`,
+          cancel_url: `${process.env.DOMAIN}/cart`,
         },
       );
 

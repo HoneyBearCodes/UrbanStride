@@ -108,9 +108,7 @@ export const postAddProduct: RequestHandler = async (req, res, next) => {
       id: product._id.toString(),
       name: title,
       description,
-      images: [
-        'https://urbanstride.onrender.com/product_images/2024-02-17T12:10:06.530Z-product-3.jpg',
-      ],
+      images: [`${process.env.DOMAIN}${imageUrl}`],
     });
 
     // Create a price for the product in Stripe
