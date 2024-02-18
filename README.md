@@ -2,7 +2,9 @@
 
 Step up your shoe game with Urban Stride - Where Style Meets Motion!
 
-![Urban Stride Logo](public/img/logo.png)
+![Urban Stride Banner](public/img/banner.jpg)
+
+**⚠️ [IMPORTANT]:** Please be patient while the website loads for the first time. The hosting provider occasionally puts the application to sleep after a period of inactivity. It might take 50 seconds or more for the website to load initially. Thank you for your understanding! 🙏💻
 
 ### [Click Here To Visit The Application &LongRightArrow;](https://urbanstride.onrender.com/)
 
