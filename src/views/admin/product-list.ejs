@@ -10,14 +10,14 @@
       <!-- MAIN CONTENT -->
       <main>
         <div class="container main">
-          <% if (products.length> 0 ) { %>
+          <% if (products.length > 0 ) { %>
             <!-- PRODUCTS GRID -->
             <div class="products grid grid--3-cols">
               <% for( let product of products ) { %>
                 <!-- PRODUCT CARD -->
                 <article class="product card">
                   <form action="/admin/delete-product" method="post">
-                    <button id="deleteButton" class="add-to-cart" type="button">
+                    <button id="deleteButton" class="deleteButton add-to-cart" type="button">
                       <span class="material-symbols-outlined">delete</span>
                     </button>
                     <input type="hidden" name="id" value="<%= product._id %>">
@@ -45,16 +45,6 @@
                 </article>
                 <% } %>
             </div>
-
-            <nav class="pagination margin-bottom-md">
-              <ul class="pagination-links">
-                <li><a href="#" class="pagination-link active">1</a></li>
-                <li><a href="#" class="pagination-link">2</a></li>
-                <li><a href="#" class="pagination-link">3</a></li>
-                <li><a href="#" class="pagination-link">4</a></li>
-                <li><a href="#" class="pagination-link">5</a></li>
-              </ul>
-            </nav>
             <% } else { %>
               <div class="error-card card card--linear margin-bottom-sm">
                 <h1 class="error-code">Booo!!</h1>
