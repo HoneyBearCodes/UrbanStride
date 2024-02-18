@@ -163,6 +163,7 @@ export const postSignup: RequestHandler = async (req, res, next) => {
     const welcomeMailHTML = compileTemplate('welcome', {
       email,
       password,
+      domain: process.env.DOMAIN,
       currentYear: new Date().getFullYear(),
     });
 
@@ -213,6 +214,7 @@ export const postReset: RequestHandler = (req, res, next) => {
 
       const resetMailHTML = compileTemplate('reset', {
         resetToken,
+        domain: process.env.DOMAIN,
         currentYear: new Date().getFullYear(),
       });
 
