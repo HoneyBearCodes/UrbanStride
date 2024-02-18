@@ -26,6 +26,8 @@ import authRouter from './routes/auth.js';
 
 // User model
 import User, { UserDocument } from './models/user.js';
+import Product from './models/product.js';
+import Order from './models/order.js';
 
 /**
  * Using module augmentation for patching the `Request` object and
@@ -175,6 +177,10 @@ try {
   log(
     `Successfully connected to the ${bold(italic(underline(process.env.MONGO_DEFAULT_DB)))} database...`,
   );
+  await Product.deleteMany({});
+  log('All products deleted successfully.');
+  await Order.deleteMany({});
+  log('All orders deleted successfully.');
 
   // Start the Express server
   app.listen(PORT, () => {
