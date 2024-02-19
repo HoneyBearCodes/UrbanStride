@@ -4,7 +4,7 @@ Step up your shoe game with Urban Stride - Where Style Meets Motion!
 
 ![Urban Stride Banner](public/img/banner.jpg)
 
-**⚠️ [IMPORTANT]:** Please be patient while the website loads for the first time. The hosting provider occasionally puts the application to sleep after a period of inactivity. It might take 50 seconds or more for the website to load initially. Thank you for your understanding! 🙏💻
+**⚠️ [IMPORTANT]:** Please be patient while the website loads for the first time. The hosting provider occasionally puts the application to sleep after a period of inactivity. It might take 50 seconds or more for the website to load initially. Additionally, if you encounter a 505 error while using the application, it's not due to a crash, but because the hosting provider has temporarily put it to sleep. In such cases, simply refresh the page after 10-15 seconds. Thank you for your understanding! 🙏💻
 
 ### [Click Here To Visit The Application &LongRightArrow;](https://urbanstride.onrender.com/)
 
