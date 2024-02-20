@@ -1,7 +1,8 @@
 <%- include('../includes/head.ejs')  %>
+<script defer src="/js/popup.js"></script>
+<script defer src="/js/forms.js"></script>
 <link rel="stylesheet" href="/css/error.css" />
 <link rel="stylesheet" href="/css/queries.css" />
-<script defer src="/js/popup.js"></script>
 </head>
 
 <body>
@@ -38,7 +39,7 @@ Urban Stride is a practice project hosted on Render. To optimize costs, the app 
       <!-- PRODUCT CARD -->
         <article class="product card">
           <% if (isAuthenticated) { %>
-            <form action="/cart" method="post">
+            <form id="submitForm" action="/cart" method="post">
               <button class="add-to-cart" type="submit">
                 <span class="material-symbols-outlined">add_shopping_cart</span>
               </button>

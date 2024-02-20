@@ -127,3 +127,8 @@
 .submit-btn:active {
   background-color: #c61e6a;
 }
+
+#submitForm .submit-btn:disabled {
+  background-color: #c61e6a;
+  cursor: not-allowed;
+}

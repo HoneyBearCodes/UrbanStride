@@ -1,4 +1,5 @@
 <%- include('../includes/head.ejs')  %>
+<script src="/js/forms.js" defer></script>
 <link rel="stylesheet" href="/css/error.css" />
 <link rel="stylesheet" href="/css/queries.css" />
 </head>
@@ -20,7 +21,7 @@
           <p class="product-price"><span>Quantity: <%= product.quantity %></span></p>
         </div>
 
-        <form action="/cart-delete-item" method="post">
+        <form id="submitForm" action="/cart-delete-item" method="post">
           <button class="submit-btn delete" type="submit">Delete</button>
           <input type="hidden" name="productId" value="<%= product.productId._id%>">
           <input type="hidden" name="_csrf" value="<%= CSRFToken %>">

@@ -45,7 +45,7 @@
         </button>
       </form>
 
-      <form action="/logout" method="post">
+      <form id="logoutForm" action="/logout" method="post">
         <button class="main-nav-action <%= path === '/login' ? 'active' : '' %>">
           <span class="material-symbols-outlined">logout</span> Logout
           <input type="hidden" name="_csrf" value="<%= CSRFToken %>">

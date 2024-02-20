@@ -1,5 +1,6 @@
 <%- include('../includes/head.ejs') %>
   <script src="/js/admin.js" defer></script>
+  <script src="/js/forms.js" defer></script>
   <link rel="stylesheet" href="/css/error.css" />
   <link rel="stylesheet" href="/css/queries.css" />
   </head>
@@ -16,7 +17,7 @@
               <% for( let product of products ) { %>
                 <!-- PRODUCT CARD -->
                 <article class="product card">
-                  <form action="/admin/delete-product" method="post">
+                  <form id="submitForm" action="/admin/delete-product" method="post">
                     <button id="deleteButton" class="deleteButton add-to-cart" type="button">
                       <span class="material-symbols-outlined">delete</span>
                     </button>

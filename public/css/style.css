@@ -124,6 +124,13 @@
   box-shadow: 0 0.1rem 0.1rem rgba(0, 0, 0, 30%);
 }
 
+#logoutForm .main-nav-action:disabled {
+  background-color: #4a238e;
+  transform: scale(95%);
+  box-shadow: 0 0.1rem 0.1rem rgba(0, 0, 0, 30%);
+  cursor: not-allowed;
+}
+
 .main-nav-action.add {
   background-color: #f72585;
 }
@@ -255,6 +262,13 @@
 .add-to-cart:active {
   background-color: #c61e6a;
   transform: scale(95%);
+}
+
+.add-to-cart:disabled {
+  background-color: #c61e6a;
+  transform: scale(95%);
+  border-radius: 100px;
+  cursor: not-allowed;
 }
 
 .details {
@@ -691,11 +705,18 @@
 }
 
 .acknowledgePopup:hover {
-  background-color: #e60046; /* Darker shade on hover */
+  background-color: #e60046;
 }
 
 .acknowledgePopup:active {
-  background-color: #cc0040; /* Even darker shade on button press */
+  background-color: #cc0040;
+  transform: scale(95%);
+}
+
+.acknowledgePopup:disabled {
+  background-color: #cc0040;
+  transform: scale(95%);
+  cursor: not-allowed;
 }
 
 .popup-container.hide {

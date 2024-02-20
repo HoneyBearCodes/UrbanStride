@@ -94,10 +94,10 @@ export const postLogin: RequestHandler = async (req, res, next) => {
 };
 
 // Handler for logging users out and clearing any session
-export const postLogout: RequestHandler = (req, res) => {
+export const postLogout: RequestHandler = (req, res, next) => {
   req.session.destroy((err) => {
     if (err) {
-      error(err);
+      return handleError(err, next);
     }
     res.redirect('/');
   });

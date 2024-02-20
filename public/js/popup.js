@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (popupContainer && acknowledgeButton) {
     // Add a click event listener to the "Got It" button
     acknowledgeButton.addEventListener('click', async function () {
+      acknowledgeButton.disabled = true;
+
       const csrfToken = this.parentNode.querySelector('[name=_csrf]').value;
 
       // Send an acknowledgment request to the server
